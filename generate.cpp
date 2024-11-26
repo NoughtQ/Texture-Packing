@@ -8,6 +8,7 @@ using namespace std;
 typedef pair<int,int> rectangle;
 
 vector<rectangle> generate(int maxHeight,int maxWeight,int num, int mode);
+void printrecs(vector<rectangle> recs, int maxHeight, int maxWeight, string filename);
 
 
 int main()
@@ -18,18 +19,11 @@ int main()
     string filename;
     cin >> maxHeight >> maxWeight >> num >> mode;
     cin >> filename;
-
-    fstream outfile;
-    outfile.open("data/"+filename, ios::out);
     
     vector<rectangle> recs;
     recs = generate(maxHeight, maxWeight, num, mode);
+    printrecs(recs, maxHeight, maxWeight, filename);
 
-    outfile << maxHeight << " " << maxWeight << " " << num << std::endl;
-    for(int i=0; i<num; i++)
-        outfile << recs[i].first << " " << recs[i].second << std::endl;
-    
-    outfile.close();
     return 0;
 }
 
@@ -70,4 +64,16 @@ vector<rectangle> generate(int maxHeight,int maxWeight,int num, int mode)
     }
 
     return recs;
+}
+
+void printrecs(vector<rectangle> recs, int maxHeight, int maxWeight, string filename)
+{
+    fstream outfile;
+    outfile.open("data/"+filename, ios::out);
+
+    outfile << maxHeight << " " << maxWeight << " " << recs.size() << std::endl;
+    for(int i=0; i<recs.size(); i++)
+        outfile << recs[i].first << " " << recs[i].second << std::endl;
+    
+    outfile.close();
 }
