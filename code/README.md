@@ -26,12 +26,15 @@ $ ./ttpMain
 18                           // Fixed width of the resulting texture
 7                            // The number of items
 7 3                          // Item 1 info
+5 8
 10 3
 6 4
 5 3
 2 5
 8 2                          // Item 7 info
-The minimum height: 13.00    // Output result
+The total height: 28.00      // Output result
+The ideal height(Area / Width): 8.67
+The minimum height: 13.00    
 ```
 
 Is it very easy? **To check more information**, you can use the command arguments we provide to you. We list all the available arguments and corresponding brief description of their functions:
@@ -40,7 +43,8 @@ Is it very easy? **To check more information**, you can use the command argument
     - the height-decreasingly sorted item data
     - the occupied-by-items width for each level
     - the positions of items
-- `--file` or `-f`: Use **file input** in directory `INPUTDIR`(macro definition) rather than terminal input.
-- `--timing` or `-t`: Activate the timing function, instead of output the correct result (and debug infomation), the program will output the **timing information** after executing the algorithm `ITERATIONS` times.
+- `--infile` or `-if`: Use **file input** in directory `INPUTDIR`(macro definition) rather than terminal input.
+- `--outfile` or `-of`: Use **file output** in directory `OUTPUTDIR`(macro definition) rather than terminal output.
+- `--timing` or `-t`: Activate the timing function, instead of output the correct result (and debug infomation, so this argument will <u>deactivate the debug mode</u>), the program will output the **timing information** after executing the algorithm `ITERATIONS` times.
 
 

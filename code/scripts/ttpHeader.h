@@ -1,6 +1,7 @@
-#define ITEMNUM 10000                       // Maximum number of items
-#define ITERATIONS 10000                    // Iteration time
-#define INPUTDIR "../test/input.txt"        // Directory of the input file
+#define ITEMNUM 1000000                           // Maximum number of items
+#define ITERATIONS 1                             // Iteration time
+#define INPUTDIR "../test/uniform_double_160000"        // Directory of the input file
+#define OUTPUTDIR "../test/FFDH/output2"                   // Directory of the output file
 
 // structure of a single item
 typedef struct item {
@@ -13,4 +14,5 @@ typedef struct item {
 // n: The number of items
 // rect: Items
 // isDebug: Flag of debug mode
-int FFDH(double W, int n, Item rect[], int isDebug);
+// outFile: Flag of file output mode
+int FFDH(double W, int n, Item rect[], int isDebug, int outFile);
