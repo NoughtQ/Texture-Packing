@@ -4,7 +4,7 @@ using namespace std;
 int main()
 {
     fstream infile;
-    infile.open("../generate_in.txt", ios::in);
+    infile.open("generate_in.txt", ios::in);
     
     //mode 0: uniform int distribution
     //mode 1：normal distribution(int)

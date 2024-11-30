@@ -57,6 +57,8 @@ vector<rectangle> generate(double maxHeight,double maxWeight,int num, int mode)
                 h = 0.1;
             if(w <= 0)
                 w = 0.1;
+            else if(w>maxWeight)
+                w = maxWeight;
             
             recs.push_back({w,h,0,0});
         }
@@ -68,7 +70,7 @@ vector<rectangle> generate(double maxHeight,double maxWeight,int num, int mode)
 void printrecs(vector<rectangle> recs, double maxHeight, double maxWeight, string filename)
 {
     fstream outfile;
-    outfile.open("../../data/"+filename, ios::out);
+    outfile.open("../data/"+filename, ios::out);
 
     /*********************
      * test example:
@@ -88,7 +90,7 @@ void printrecs(vector<rectangle> recs, double maxHeight, double maxWeight, strin
 vector<rectangle> readRecs(std::string filename)
 {
     fstream infile;
-    infile.open("../../data/"+filename, ios::in);
+    infile.open("../data/"+filename, ios::in);
     vector<rectangle> recs;
     double maxWeight;
     int n;

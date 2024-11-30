@@ -1,13 +1,13 @@
-4
+1
 
-100 100 200 0
-uniform_int_200
+20 50 1000 0
+uniform_int_1000
 
-100 100 200 1
-normal_int_200
+50 50 1000 1
+normal_int_1000
 
-100 100 200 2
-uniform_double_200
+50 50 1000 2
+uniform_double_1000
 
-100 100 200 3
-normal_double_200
+50 50 1000 3
+normal_double_1000

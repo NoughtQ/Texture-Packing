@@ -26,8 +26,11 @@ def draw_rectangles(rectangles,canvas_width,output_file):
     # 设置坐标轴的显示范围
     x_coords = [x for x, y, width, height in rectangles] + [x + width for x, y, width, height in rectangles]
     y_coords = [y for x, y, width, height in rectangles] + [y + height for x, y, width, height in rectangles]
-    ax.set_xlim(min(x_coords), canvas_width+1)
-    ax.set_ylim(min(y_coords), max(y_coords))
+    ax.axhline(y=max(y_coords), color='r', linestyle='--')
+    ax.text(canvas_width + 0.5, max(y_coords), f'{max(y_coords):.2f}', color='r', va='center')
+    ax.text(canvas_width + 0.5, 0, f'{canvas_width}', color='b', va='center')
+    ax.set_xlim(min(x_coords), max(max(x_coords),canvas_width+1))
+    ax.set_ylim(min(y_coords), max(y_coords)*1.05)
 
     plt.savefig(output_file, bbox_inches='tight', dpi=300)  # 保存图片到文件
 
