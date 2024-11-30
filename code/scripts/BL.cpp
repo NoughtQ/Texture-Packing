@@ -1,33 +1,8 @@
-#include<iostream>
-#include<cstdbool>
-#include<vector>
-#include<list>
-#include<algorithm>
+#include"header.h"
 
 using namespace std;
 
-struct REC{
-    double width;
-    double height;
-    double x1,y1;
-};
-struct POINT{
-    double x;
-    double y;
-    double width;
-
-    bool operator==(const POINT& other)
-    {
-        return x==other.x && y==other.y && width==other.width;
-    };
-};
-
-bool cmpRecWidth(REC a, REC b)
-{
-    return a.width > b.width;
-}
-
-double BL(vector<REC> recs, double width)
+double BL(vector<rectangle> recs, double width)
 {
     //initialize
     list<POINT> upBound;
@@ -133,11 +108,4 @@ double BL(vector<REC> recs, double width)
     }
     return maxHeight;
 
-}
-
-int main()
-{
-    vector<REC> recs = {{10,1,0,0},{9,1,0,0},{8,1,0,0},{6,1,0,0},{3,2,0,0},{5,3,0,0}};
-    cout << BL(recs, 10) << endl;
-    return 0;
 }

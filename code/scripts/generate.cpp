@@ -1,43 +1,5 @@
-#include<iostream>
-#include<fstream>
-#include<string>
-#include<vector>
-#include<random>
+#include"header.h"
 using namespace std;
-
-typedef pair<double,double> rectangle;
-
-vector<rectangle> generate(double maxHeight,double maxWeight,int num, int mode);
-void printrecs(vector<rectangle> recs, double maxHeight, double maxWeight, string filename);
-
-
-int main()
-{
-    fstream infile;
-    infile.open("../test/generate_in.txt", ios::in);
-    
-    //mode 0: uniform int distribution
-    //mode 1：normal distribution(int)
-    //mode 2: uniform real distribution
-    //mode 3: normal distribution(double)
-    int i;
-    double maxHeight,maxWeight;
-    int num,mode,n;
-    string filename;
-
-    infile >> n;
-    for(i=0; i<n; i++)
-    {
-        infile >> maxHeight >> maxWeight >> num >> mode;
-        infile >> filename;
-        
-        vector<rectangle> recs;
-        recs = generate(maxHeight, maxWeight, num, mode);
-        printrecs(recs, maxHeight, maxWeight, filename); 
-    }
-
-    return 0;
-}
 
 vector<rectangle> generate(double maxHeight,double maxWeight,int num, int mode)
 {
@@ -50,7 +12,7 @@ vector<rectangle> generate(double maxHeight,double maxWeight,int num, int mode)
         uniform_int_distribution<> height(1, maxHeight);
         uniform_int_distribution<> weight(1, maxWeight);
         for(int i=0; i<num; i++)
-            recs.push_back(make_pair(height(gen),weight(gen)));
+            recs.push_back({(double)weight(gen),(double)height(gen),0,0});
     }
     else if(mode == 1)
     {
@@ -71,7 +33,7 @@ vector<rectangle> generate(double maxHeight,double maxWeight,int num, int mode)
             else if(w > maxWeight)
                 w = maxWeight;
 
-            recs.push_back(make_pair(h,w));
+            recs.push_back({(double)w,(double)h,0,0});
         }
     }
     else if(mode == 2)
@@ -79,7 +41,7 @@ vector<rectangle> generate(double maxHeight,double maxWeight,int num, int mode)
         uniform_real_distribution<> height(1, maxHeight);
         uniform_real_distribution<> weight(1, maxWeight);
         for(int i=0; i<num; i++)
-            recs.push_back(make_pair(height(gen),weight(gen)));
+            recs.push_back({weight(gen),height(gen),0,0});
     }
     else if(mode == 3)
     {
@@ -96,7 +58,7 @@ vector<rectangle> generate(double maxHeight,double maxWeight,int num, int mode)
             if(w <= 0)
                 w = 0.1;
             
-            recs.push_back(make_pair(h,w));
+            recs.push_back({w,h,0,0});
         }
     }
 
@@ -106,7 +68,7 @@ vector<rectangle> generate(double maxHeight,double maxWeight,int num, int mode)
 void printrecs(vector<rectangle> recs, double maxHeight, double maxWeight, string filename)
 {
     fstream outfile;
-    outfile.open("../test/"+filename, ios::out);
+    outfile.open("../../data/"+filename, ios::out);
 
     /*********************
      * test example:
@@ -118,7 +80,25 @@ void printrecs(vector<rectangle> recs, double maxHeight, double maxWeight, strin
     **********************/
     outfile << maxWeight << " " << recs.size() << std::endl;
     for(int i=0; i<recs.size(); i++)
-        outfile << recs[i].second << " " << recs[i].first << std::endl;
+        outfile << recs[i].width << " " << recs[i].height << std::endl;
     
     outfile.close();
+}
+
+vector<rectangle> readRecs(std::string filename)
+{
+    fstream infile;
+    infile.open("../../data/"+filename, ios::in);
+    vector<rectangle> recs;
+    double maxWeight;
+    int n;
+    infile >> maxWeight >> n;
+    for(int i=0; i<n; i++)
+    {
+        double w,h;
+        infile >> w >> h;
+        recs.push_back({w,h,0,0});
+    }
+    infile.close();
+    return recs;
 }
