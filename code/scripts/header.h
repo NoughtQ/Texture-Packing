@@ -39,7 +39,8 @@ bool cmpRecWidth(rectangle a, rectangle b);
 double BL(std::vector<rectangle>* recs, double width, bool isDebug, std::string debugFile);
 double BL_change(std::vector<rectangle>* recs, double width, bool isDebug, std::string debugFile);
 std::vector<rectangle> readRecs(std::string filename);
-std::vector<rectangle> generate(double maxHeight,double maxWeight,int num, int mode);
+std::vector<rectangle> random_generate(double maxHeight,double maxWeight,int num, int mode);
+std::vector<rectangle> square_generate(double Height,double Weight,int hNum, int wNum);
 void printrecs(std::vector<rectangle> recs, double maxHeight, double maxWeight, std::string filename);
 
 

@@ -1,7 +1,7 @@
 #include"header.h"
 using namespace std;
 
-vector<rectangle> generate(double maxHeight,double maxWeight,int num, int mode)
+vector<rectangle> random_generate(double maxHeight,double maxWeight,int num, int mode)
 {
     vector<rectangle> recs;
     random_device rd;
@@ -63,6 +63,43 @@ vector<rectangle> generate(double maxHeight,double maxWeight,int num, int mode)
             recs.push_back({w,h,0,0});
         }
     }
+
+    return recs;
+}
+
+vector<rectangle> square_generate(double Height,double Weight,int hNum, int wNum)
+{
+    vector<rectangle> recs;
+    random_device rd;
+    mt19937 gen(rd());
+
+    uniform_int_distribution<> height(1, Height-1);
+    uniform_int_distribution<> weight(1, Weight-1);
+
+    vector<int> hp;
+    vector<int> wp;
+    hp.push_back(0);
+    wp.push_back(0);
+    hp.push_back(Height);
+    wp.push_back(Weight);
+    while(hp.size()<hNum+1)
+    {
+        int h = height(gen);
+        if(find(hp.begin(), hp.end(), h) == hp.end())
+            hp.push_back(h);
+    }
+    while(wp.size()<wNum+1)
+    {
+        int w = weight(gen);
+        if(find(wp.begin(), wp.end(), w) == wp.end())
+            wp.push_back(w);
+    }
+    sort(hp.begin(), hp.end());
+    sort(wp.begin(), wp.end());
+
+    for(int i=1; i<=hNum; i++)
+        for(int j=1; j<=wNum; j++)
+            recs.push_back({(double)(wp[j]-wp[j-1]),(double)(hp[i]-hp[i-1]),0,0});
 
     return recs;
 }

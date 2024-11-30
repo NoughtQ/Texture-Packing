@@ -21,9 +21,9 @@ int main()
     cout << "maxHeight(BL):" << BL(&recs1, width, true, debugFile1) << endl;
     cout << "maxHeight(BL_change):" << BL_change(&recs2, width, true, debugFile2) << endl;
     outfile << width << endl;
-    for(int i=0; i<recs2.size(); i++)
+    for(int i=0; i<recs1.size(); i++)
     {
-        outfile << recs2[i].x1 <<" "<<  recs2[i].y1 <<" "<<  recs2[i].width <<" "<<  recs2[i].height << endl;
+        outfile << recs1[i].x1 <<" "<<  recs1[i].y1 <<" "<<  recs1[i].width <<" "<<  recs1[i].height << endl;
     }
 
 
