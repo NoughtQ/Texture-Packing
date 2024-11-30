@@ -1,2 +1,8 @@
 .vscode
+report-template
+output
+test
+
+*.o
 *.exe
+
