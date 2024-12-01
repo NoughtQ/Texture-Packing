@@ -1,0 +1,27 @@
+Debug Info:
+Height-decreasingly sorted item data:
+0: 4.00, 10.00
+1: 6.00, 7.00
+2: 2.00, 6.00
+3: 15.00, 5.00
+4: 13.00, 4.00
+5: 17.00, 3.00
+
+Total level: 4
+Width:
+0 level: 12.00
+1 level: 15.00
+2 level: 13.00
+3 level: 17.00
+
+Position:
+Item 1: level 0, x: 0.00, y: 0.00
+Item 2: level 0, x: 4.00, y: 0.00
+Item 3: level 0, x: 10.00, y: 0.00
+Item 4: level 1, x: 0.00, y: 10.00
+Item 5: level 2, x: 0.00, y: 15.00
+Item 6: level 3, x: 0.00, y: 19.00
+====================================
+The total height: 35.00
+The ideal height(Area / Width): 15.11
+The "minimum" height: 22.00

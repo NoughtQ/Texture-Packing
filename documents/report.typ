@@ -208,7 +208,7 @@ The "minimum" height: 13.00
 ```
 ]
 
-As the debug show above, our program can figure out this case #text(green)[properly].
+As the debug info show above, our program can figure out this case #text(green)[properly].
 
 *Test 2*
 
@@ -216,7 +216,7 @@ As the debug show above, our program can figure out this case #text(green)[prope
 - Input: See the input file in directory `./code/test/FFDH/input2`
 - Expected Result:
 
-#figure(image("images/3.png", width: 80%), caption: "Correctness Test 2 for FFDH Algorithm")
+#figure(image("images/3.png", width: 90%), caption: "Correctness Test 2 for FFDH Algorithm")
 
 - Actual Result:
 
@@ -252,15 +252,57 @@ The "minimum" height: 22.00
 ```
 ]
 
-As the debug show above, our program can figure out this case #text(green)[properly]. However, there is a big bias for the calculation of the algorithm calculated and the optimal solution.
+As the debug info show above, our program can figure out this case #text(green)[properly]. However, there is some bias for the calculation of the algorithm calculated and the optimal solution.
 
 
 *Test 3*
 
-- Purpose: 
+- Purpose: check the correctness in #fakebold[the large-scale case, with very large waste space]. 
 - Input: See the input file in directory `./code/test/FFDH/input3`
 - Expected Result:
+
+#figure(image("images/4.png", width: 100%), caption: "Correctness Test 3 for FFDH Algorithm")
+
 - Actual Result:
+
+#table(align: left, columns: 1fr, stroke: .5pt)[`./code/test/FFDH/output3`][
+```
+Debug Info:
+Height-decreasingly sorted item data:
+0: 2.00, 10000.00
+1: 2.00, 2.00
+2: 18.00, 1.00
+3: 18.00, 1.00
+...
+10000: 18.00, 1.00
+10001: 18.00, 1.00
+
+Total level: 10001
+Width:
+0 level: 4.00
+1 level: 18.00
+2 level: 18.00
+3 level: 18.00
+...
+9999 level: 18.00
+10000 level: 18.00
+
+Position:
+Item 0: level 0
+Item 1: level 0
+Item 2: level 1
+Item 3: level 2
+...
+Item 10000: level 9999
+Item 10001: level 10000
+====================================
+The total height: 20002.00
+The ideal height(Area / Width): 10000.20
+The "minimum" height: 20000.00
+```
+]
+
+As the debug info show above, our program can figure out this case #text(green)[properly]. However, there is very big bias for the calculation of the algorithm calculated and the optimal solution, and $frac(F F G H(L), O P T(L)) approx 2$, where $F F D H(L)$ and $O P T(L)$ are the solution of FFFH algorithm and optimal solution respectively.
 
 === Performance Tests
 

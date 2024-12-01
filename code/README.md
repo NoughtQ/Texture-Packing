@@ -43,6 +43,7 @@ Is it very easy? **To check more information**, you can use the command argument
     - the height-decreasingly sorted item data
     - the occupied-by-items width for each level
     - the positions of items
+    - (need cooperate with argument `-of`)the input file for drawing the items by draw.py
 - `--infile` or `-if`: Use **file input** in directory `INPUTDIR`(macro definition) rather than terminal input.
 - `--outfile` or `-of`: Use **file output** in directory `OUTPUTDIR`(macro definition) rather than terminal output.
 - `--timing` or `-t`: Activate the timing function, instead of output the correct result (and debug infomation, so this argument will <u>deactivate the debug mode</u>), the program will output the **timing information** after executing the algorithm `ITERATIONS` times.

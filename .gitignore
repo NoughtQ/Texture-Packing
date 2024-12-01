@@ -1,7 +1,7 @@
 .vscode
 report-template
 output
-test
+random_data
 
 *.o
 *.exe
