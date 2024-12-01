@@ -19,8 +19,8 @@ test:
         outfile[i].open(recFile+to_string(i)+".txt", ios::out);    
     
     //input the data test file name
-    cout << "Please input the name of the file you want to test:" << endl;
-    cout << "\033[34mPS: the file should be in the \"data\" folder, and you need to give the file name including suffix\033[0m" << endl;
+    cout << "\033[34mPlease input the name of the file you want to test:" << endl;
+    cout << "PS: the file should be in the \"data\" folder, and you need to give the file name including suffix\033[0m" << endl;
     cin >> filename;
     infile.open(DATA_FILE + filename, ios::in);
     
@@ -34,14 +34,14 @@ test:
     recs[1] = recs[0];
     recs[2] = recs[0];
 
-    cout << "Open test mode (generate no debug information)?(Y/N)" << endl;
+    cout << "\033[34mOpen test mode (generate no debug information)?\033[0m(Y/N)" << endl;
     char c; cin >> c;
     
     //The test mode:
     if(c == 'Y' || c == 'y')
     {
         //The number of loop executions
-        cout << "Number of loop executions:" << endl;
+        cout << "\033[34mNumber of loop executions:\033[0m" << endl;
         int k; cin >> k;
         
         double solution,duration=0;
@@ -84,14 +84,14 @@ test:
     //debug mode
     else
     {
-        cout << "\033[31mmaxHeight(BL):" << BL(recs, width, true, debugFile+"_BL.txt") << endl;
-        cout << "maxHeight(BL_change):\033[0m" << BL_change(recs+1, width, true, debugFile+"_BL_Change.txt") << endl;
+        cout << "\033[31mmaxHeight(BL):\033[0m" << BL(recs, width, true, debugFile+"_BL.txt") << endl;
+        cout << "\033[31mmaxHeight(BL_change):\033[0m" << BL_change(recs+1, width, true, debugFile+"_BL_Change.txt") << endl;
     }
     
     cout << "************************************" << endl;
     
     //write the data to the file to draw the figure
-    for(i=0; i<1; i++)
+    for(i=0; i<2; i++)
     {
         outfile[i] << width << endl;
         for(int j=0; j<recs[i].size(); j++)
@@ -107,7 +107,7 @@ test:
         cout << "Successfully generated the figure! You can see them in \"fig\" now." << endl;
     } */
 
-    cout << "run again?(Y/N)" << endl; cin >> c;
+    cout << "\033[34mrun again?\033[0m(Y/N)" << endl; cin >> c;
     if(c=='Y' || c=='y') goto test;
 
     return 0;

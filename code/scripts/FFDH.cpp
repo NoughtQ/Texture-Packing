@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
-#include "ttpHeader.h"
+#include "headers/ttpHeader.h"
 
 double curWidth[ITEMNUM];                  // Array recording the total item width in each level
 int pos[ITEMNUM];                          // Array recording the position(which level) of every item
