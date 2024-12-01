@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "headers/ttpHeader.h"
+#include <string>
+#include "ttpHeader.h"
 
 double curWidth[ITEMNUM];                  // Array recording the total item width in each level
 int pos[ITEMNUM];                          // Array recording the position(which level) of every item
 double levelHeight[ITEMNUM];               // Height of each level(depending on the first item in the level)
 int level;                                 // Current level of the resulting texture
+extern std::string outFileName;                 // Name of the output file
 
 int cmp(const void * a, const void * b);                // Comparator for decrease-order quicksort function
 void printDebugInfo(double W, int n, Item * rect, int outFile);   // Print the debug infomation when using "--debug" command argument
@@ -110,7 +112,10 @@ void printDebugInfo(double W, int n, Item * rect, int outFile) {
         // Deviding line
         printf("====================================\n");
     } else {    // File output mode
-        FILE * fp = fopen(OUTPUTDIR, "w");
+        std::string outDirName;
+        outFileName = outFileName == "" ? "output" : outFileName;
+        outDirName = OUTPUTDIR + outFileName;
+        FILE * fp = fopen(outDirName.c_str(), "w");
 
         fprintf(fp, "Debug Info:\n");
         
@@ -139,7 +144,9 @@ void printDebugInfo(double W, int n, Item * rect, int outFile) {
         fclose(fp);
 
         // 4.(only for file output) Get the input file for draw.py
-        fp = fopen(DRAWINPUTDIR, "w");
+        std::string drawFileName = "rectangle" + outFileName.substr(6) + ".txt";
+        std::string drawDirName = DRAWINPUTDIR + drawFileName;
+        fp = fopen(drawDirName.c_str(), "w");
 
         fprintf(fp, "%.2f\n", W);
         for (i = 0; i < n; i++) {
@@ -148,5 +155,6 @@ void printDebugInfo(double W, int n, Item * rect, int outFile) {
 
         fclose(fp);
 
+        printf("The output file is saved as %s\n", outDirName.c_str());     // Hint
     }
 }

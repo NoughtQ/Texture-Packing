@@ -1,6 +1,8 @@
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
 #include <time.h>
 #include "ttpHeader.h"
 
@@ -13,6 +15,7 @@ int isDebug;                 // Flag of debug mode
 int isTiming;                // Flag of timing mode
 int outChoice;               // Flag of file output mode
 clock_t start, stop;         // Record of start and stop time of the approximation algorithm
+std::string outFileName = "";     // Name of the output file
 
 // Input handler
 void getInput(int argc, char * argv[]);
@@ -40,13 +43,15 @@ int main(int argc, char * argv[]) {
             printf("The ideal height(Area / Width): %.2f\n", Area / Width);        
             printf("The \"minimum\" height: %.2f\n", miniHeight);    // Output the result in the terminal
         } else {       // Output the result in the file
-            FILE * fp = fopen(OUTPUTDIR, "r");
+            std::string outDirName = OUTPUTDIR + outFileName;
+
+            FILE * fp = fopen(outDirName.c_str(), "r");
             if (fgetc(fp) == 'T') {        // If the file contains the info of last execution
                 fclose(fp);
-                FILE * fp = fopen(OUTPUTDIR, "w");      // Clean the original content in the file
+                FILE * fp = fopen(outDirName.c_str(), "w");      // Clean the original content in the file
             } else {                       // Otherwise, the file is just empty or contains the debug info
                 fclose(fp);
-                FILE * fp = fopen(OUTPUTDIR, "a");      // Append the output to the file           
+                FILE * fp = fopen(outDirName.c_str(), "a");      // Append the output to the file           
             }
             fprintf(fp, "The total height: %.2f\n", totalHeight);         
             fprintf(fp, "The ideal height(Area / Width): %.2f\n", Area / Width); 
@@ -90,7 +95,16 @@ void getInput(int argc, char * argv[]) {
             Area += rect[i].height * rect[i].width;
         }
     } else {          // File input
-        FILE * fp = fopen(INPUTDIR, "r");     // Read the input file
+        std::string inFileName;           // Name of the input file
+        std::string inDirName;            // The whole directory of the input file
+
+        printf("Please input the input file name:\n");
+        std::cin >> inFileName;
+        inDirName = INPUTDIR + inFileName;
+        outFileName = "output" + inFileName.substr(5);
+
+
+        FILE * fp = fopen(inDirName.c_str(), "r");     // Read the input file
         if (fp == NULL) {     // If it can't open the file, exit the program
             printf("Fail to read the input file. Please ensure that you use the true directory.");
             exit(1);

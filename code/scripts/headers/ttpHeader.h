@@ -1,8 +1,8 @@
 #define ITEMNUM 1000000                           // Maximum number of items
-#define ITERATIONS 1                             // Iteration time
-#define INPUTDIR "../test/FFDH/inputs/input1"        // Directory of the input file
-#define OUTPUTDIR "../test/FFDH/outputs/output1"                   // Directory of the output file
-#define DRAWINPUTDIR "../test/FFDH/rects/rectangle1.txt"     // Input file for draw.py
+#define ITERATIONS 1                              // Iteration time
+#define INPUTDIR "inputs/FFDH/inputs/"         // Directory of the input file
+#define OUTPUTDIR "outputs/FFDH/outputs/"      // Directory of the output file
+#define DRAWINPUTDIR "outputs/FFDH/rects/"     // Input file for draw.py
 
 // structure of a single item
 typedef struct item {

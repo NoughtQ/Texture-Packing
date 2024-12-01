@@ -10,7 +10,7 @@
   semester: "2024-2025 Autumn&Winter",
   // author: [Huang Xingyao\ $quad quad$ Qian Ziyang],
   school_id: "",
-  date: "2024-11-30",
+  date: "2024-12-02",
   table_of_contents: true
 )
 
@@ -24,6 +24,8 @@ The project require us to design #fakebold[approximation algorithms] running in 
 
 == Backgound of Data Structures and Algorithms
 
+=== RL Algorithm
+
 === FFDH Algorithm
 
 #v(.5em)
@@ -36,9 +38,6 @@ Just like texture packing problem is the 2D version of bin packing problem, the 
 
 #figure(image("images/1.png", width: 95%), caption: "FFDH Approximation Algorithm")
 
-=== Advanced Approximation Algorithm
-
-#v(.5em)
 
 
 = Chapter 2: Algorithm Specification
@@ -51,6 +50,12 @@ In this chapter, we will introduce approximation algorithms of FFDH(basic versio
 - Calculation of approximation ratio of algorithm with proof.
 
 Beware that our project doesn't use complex data structures and we only use arrays and structures in C, so it's meaningless to introduce them and we should only focus on the algorithm implementation.
+
+== RL Algorithm
+
+#v(.5em)
+
+
 
 == FFDH Algorithm
 
@@ -108,51 +113,13 @@ We can divide the procedure into four steps:
     - the positions of items.
 4. Return the current height of the bin as the "minimum" height.
 
-#line(length: 100%, stroke: .3pt)
 
-Now we should figure out the approximation ratio of this algorithm. We claim that FFDH algorithm is a #fakebold[2-approximation algorithm]. Here is the proof:
-
-#let render(theme_name) = [
-  #state_block_theme.update(theme_name)
-
-  #proof(name: [Proof])[
-    Assume that:
-
-    - all items have been sorted by their height in decreasing order
-    - $L$: the list of items
-    - $O P T(L)$: the optimal solution(the actual minimum height) of texture packing
-    - $F F D H(L)$: the solution attained from the FFDH algorithm
-    - $w_i$: the width of the ith item
-    - $h_i$: the height of the ith item
-      - $h_0$: the highest height
-    - $W$: the fixed width of the bin
-    - $A = sum_(i=1)^n w_i dot h_i$：the total area of all items
-
-    First of all, we can determine the upper bound of the $O P T(L)$
-
-    - Obviously, $O P T(L) gt.eq h_0$
-    - $O P T(L) gt.eq frac(A, W)$, because the item on the right side represents the ideal result when all items fill the bin "tightly", i.e. no space waste in the bin.
+Now we should figure out the approximation ratio of this algorithm. We claim that FFDH algorithm is a #fakebold[2-approximation algorithm]. Here is the proof.
 
 
-    Claim: $F F D H(L)$ satisfies the inequality below:
-
-    $ F F D H(L) lt.eq frac(A, W) + h_0 lt.eq 2 O P T(L) $
-
-    - let $h_r = F F D H(L) - h_0$, which is the remaining height of the bin in FFDH algorithm
-    - then we should prove that $h_r lt.eq frac(A, W)$. Because this approximation algorithm is also a #fakebold[greedy algorithm], which always put the highest item into the bin first, it ensures that the correctness of this inequality
-
-    As a consequence, the approximation ratio $rho = frac(F F D H(L), O P T(L)) lt.eq 2$, and we can guarantee that FFDH is a 2-approximation algorithm.
 
 
-    Beware that our proof is not very rigor, and the actual approximation ratio may be less than 2.
-  ]
 
-  #v(.5em)
-]
-#render("thickness")
-
-
-== Advanced Approximation Algorithm
 
 = Chapter 3: Testing Results
 
@@ -422,6 +389,12 @@ We use a *quadratic polynomial curve* fitting data point, and find that there is
 == FFDH.cpp
 
 #importCode("../code/scripts/FFDH.cpp")
+
+= References
+
+#v(.5em)
+
+1. Wikipedia, Strip packing problem, #link("https://en.wikipedia.org/wiki/Strip_packing_problem")[#text(fill: blue)[https://en.wikipedia.org/wiki/Strip_packing_problem]]
 
 = Declaration
 
