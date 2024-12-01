@@ -113,6 +113,7 @@ void printDebugInfo(double W, int n, Item * rect, int outFile) {
         printf("====================================\n");
     } else {    // File output mode
         std::string outDirName;
+        outFileName = outFileName == "" ? "output" : outFileName;
         outDirName = OUTPUTDIR + outFileName;
         FILE * fp = fopen(outDirName.c_str(), "w");
 
