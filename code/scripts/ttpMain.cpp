@@ -136,5 +136,4 @@ void printTime(clock_t start, clock_t end, int Outfile) {
 
         fclose(fp);
     }
-
 }

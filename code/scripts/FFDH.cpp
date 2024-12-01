@@ -4,10 +4,11 @@
 
 double curWidth[ITEMNUM];                  // Array recording the total item width in each level
 int pos[ITEMNUM];                          // Array recording the position(which level) of every item
+double levelHeight[ITEMNUM];               // Height of each level(depending on the first item in the level)
 int level;                                 // Current level of the resulting texture
 
 int cmp(const void * a, const void * b);                // Comparator for decrease-order quicksort function
-void printDebugInfo(int n, Item * rect, int outFile);   // Print the debug infomation when using "--debug" command argument
+void printDebugInfo(double W, int n, Item * rect, int outFile);   // Print the debug infomation when using "--debug" command argument
 
 // First Fit by Decreasing Height, a basic 2-approximation algorithm
 // W: Fixed width of the resulting texture
@@ -33,24 +34,29 @@ int FFDH(double W, int n, Item rect[], int isDebug, int outFile) {
         for (j = 0; j < level; j++) {
             // Find it!
             if (curWidth[j] + rect[i].width <= W) {
-                curWidth[j] += rect[i].width;     // Update the width of current level
-                pos[i] = j;                       // Record the position of the item
+                rect[i].x = curWidth[j];              // Update the position of the item
+                rect[i].y = levelHeight[j];
+                curWidth[j] += rect[i].width;         // Update the width of current level
+                pos[i] = j;                           // Record the position of the item
                 break;
             } 
         }
-        if (j < level)                            // If found, continue to process next loop
+        if (j < level)                                // If found, continue to process next loop
             continue;
 
         // If not found
         ++level;                                  // Create a new level
         curWidth[level - 1] = rect[i].width;      // Update the width of current level
+        levelHeight[level - 1] = curHeight;       // Update the height of the level
         curHeight += rect[i].height;              // Update the current height
-        pos[i] = level - 1;                       // Record the position of the item
+        rect[i].x = 0;                            // Update the position of the item
+        rect[i].y = levelHeight[level - 1];        
+        pos[i] = level - 1;                       // Record the level of the item
     }
 
     // Print the debug infomation when using "--debug" command argument
     if (isDebug)
-        printDebugInfo(n, rect, outFile);
+        printDebugInfo(W, n, rect, outFile);
 
     // Return the current height of the resulting texture as the minimal height
     return curHeight;
@@ -72,10 +78,11 @@ int cmp(const void * a, const void * b) {
 }
 
 // Print the debug infomation when using "--debug" command argument
+// W: Fixed width of the resulting texture
 // n: The number of items
 // rect: Items
 // outFile: Flag of file output mode
-void printDebugInfo(int n, Item * rect, int outFile) {
+void printDebugInfo(double W, int n, Item * rect, int outFile) {
     int i;
 
     if (!outFile) {    // Default output mode(print the info in the terminal)
@@ -84,8 +91,8 @@ void printDebugInfo(int n, Item * rect, int outFile) {
         // 1. Print the height-decreasingly sorted item data
         printf("Height-decreasingly sorted item data:\n");
         for (i = 0; i < n; i++) {
-            printf("%d: %.2f, %.2f\n", i, rect->width, rect->height);
-            ++rect;
+            printf("%d: %.2f, %.2f\n", i, rect[i].width, rect[i].height);
+            // ++rect;
         }
 
         // 2. Print the occupied-by-items width for each level
@@ -97,7 +104,7 @@ void printDebugInfo(int n, Item * rect, int outFile) {
         // 3. Print the positions of items
         printf("\nPosition:\n");
         for (i = 0; i < n; i++) {
-            printf("Item %d: level %d\n", i, pos[i]);
+            printf("Item %d: level %d, x: %.2f, y: %.2f\n", i + 1, pos[i], rect[i].x, rect[i].y);
         }
 
         // Deviding line
@@ -110,8 +117,8 @@ void printDebugInfo(int n, Item * rect, int outFile) {
         // 1. Print the height-decreasingly sorted item data
         fprintf(fp, "Height-decreasingly sorted item data:\n");
         for (i = 0; i < n; i++) {
-            fprintf(fp, "%d: %.2f, %.2f\n", i, rect->width, rect->height);
-            ++rect;
+            fprintf(fp, "%d: %.2f, %.2f\n", i, rect[i].width, rect[i].height);
+            // ++rect;
         }
 
         // 2. Print the occupied-by-items width for each level
@@ -123,12 +130,23 @@ void printDebugInfo(int n, Item * rect, int outFile) {
         // 3. Print the positions of items
         fprintf(fp, "\nPosition:\n");
         for (i = 0; i < n; i++) {
-            fprintf(fp, "Item %d: level %d\n", i, pos[i]);
+            fprintf(fp, "Item %d: level %d, x: %.2f, y: %.2f\n", i + 1, pos[i], rect[i].x, rect[i].y);
         }
 
         // Deviding line
         fprintf(fp, "====================================\n");
 
         fclose(fp);
+
+        // 4.(only for file output) Get the input file for draw.py
+        fp = fopen(DRAWINPUTDIR, "w");
+
+        fprintf(fp, "%.2f\n", W);
+        for (i = 0; i < n; i++) {
+            fprintf(fp, "%.2f %.2f %.2f %.2f\n", rect[i].x, rect[i].y, rect[i].width, rect[i].height);
+        }   
+
+        fclose(fp);
+
     }
 }

@@ -15,12 +15,12 @@ Width:
 3 level: 17.00
 
 Position:
-Item 0: level 0
-Item 1: level 0
-Item 2: level 0
-Item 3: level 1
-Item 4: level 2
-Item 5: level 3
+Item 1: level 0, x: 0.00, y: 0.00
+Item 2: level 0, x: 4.00, y: 0.00
+Item 3: level 0, x: 10.00, y: 0.00
+Item 4: level 1, x: 0.00, y: 10.00
+Item 5: level 2, x: 0.00, y: 15.00
+Item 6: level 3, x: 0.00, y: 19.00
 ====================================
 The total height: 35.00
 The ideal height(Area / Width): 15.11
