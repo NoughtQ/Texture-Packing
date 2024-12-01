@@ -22,9 +22,11 @@
 
 The project require us to design #fakebold[approximation algorithms] running in polynomial time to solve #fakebold[Texture Packing] problem. We can regard it as a #underline[2-dimension bin packing], with items("rectangle texture" in the problem) and bins("resulting texture" in the problem) having both width and height, but we only need a single bin with #fakebold[bounded width] and #fakebold[unbounded height], and we should keep the bin with a (nearly) minimum height.
 
-== Backgound of Data Structures and Algorithms
+== Backgound of Algorithms
 
-=== RL Algorithm
+=== BL Algorithm
+
+#v(.5em)
 
 === FFDH Algorithm
 
@@ -49,9 +51,11 @@ In this chapter, we will introduce approximation algorithms of FFDH(basic versio
 - Description of approximation algotithms with pseudocodes.
 - Calculation of approximation ratio of algorithm with proof.
 
-Beware that our project doesn't use complex data structures and we only use arrays and structures in C, so it's meaningless to introduce them and we should only focus on the algorithm implementation.
+The main data structure we used is a `struct` called `Item`. Each `Item` contains four elements(all double values): `width`, `height`, `x` and `y`, which represent the width, the height and the lower left point of the item respectively.
 
-== RL Algorithm
+#figure(image("images/5.png", width: 37%), caption: [The `struct Item`])
+
+== BL Algorithm
 
 #v(.5em)
 
@@ -103,18 +107,18 @@ Initially, let's take a look at the pseudocode of FFDH to gain a deeper insight 
 
 We can divide the procedure into four steps:
 
-1. Sort all items by their height in decreasing order.
+1. #fakebold[Sort] all items by their height in decreasing order.
 2. For all items, put them into the bin in the sorted order.
-  - Scan all levels from bottom to top, find the first level that can accomodate the current item.
-  - If no levels can fit it, then create a new level and put it into the new level.
-3. (if necessary)Print the debug info, including:
+  - Scan all levels from bottom to top, #fakebold[find the first level that can accomodate the current item].
+  - If no levels can fit it, then #fakebold[create a new level] and put it into the new level.
+3. (if necessary)#fakebold[Print the debug info], including:
     - the height-decreasingly sorted item data,
     - the occupied-by-items width for each level,
     - the positions of items.
-4. Return the current height of the bin as the "minimum" height.
+4. #fakebold[Return] the current height of the bin as the "minimum" height.
 
 
-Now we should figure out the approximation ratio of this algorithm. We claim that FFDH algorithm is a #fakebold[2-approximation algorithm]. Here is the proof.
+Now we should figure out the approximation ratio of this algorithm. It was proved that FFDH algorithm is a #fakebold[2.7-approximation algorithm] (the conclusion is given by Wikipedia). Because it is difficult for us to prove this approximation ratio based on our mathematical knowledge, and the relevant proof content cannot be directly checked on the Internet (need to pay to unlock the paper), so unfortunately the proof part is omitted.
 
 
 
@@ -127,6 +131,15 @@ Now we should figure out the approximation ratio of this algorithm. We claim tha
 
 In this chapter, we will test our approximation algorithms to check their correctness and performance, which lays a solid foundation for our following analysis on time complexity. We will use test tables and curve diagrams to make our explanation more graphically and vividly.
 
+== BL Algorithm
+
+=== Correctness Tests
+
+=== Performance Tests
+
+
+
+
 == FFDH Algorithm
 
 === Correctness Tests
@@ -136,14 +149,14 @@ In this chapter, we will test our approximation algorithms to check their correc
 *Test 1*
 
 - Purpose: check the correctness in #fakebold[the normal case, with relatively small waste space]. 
-- Input: See the input file in directory `./code/test/FFDH/input1`
+- Input: See the input file in directory `./code/inputs/FFDH/inputs/input1`
 - Expected Result:
 
 #figure(image("images/2.png", width: 50%), caption: "Correctness Test 1 for FFDH Algorithm")
 
 - Actual Result: 
 
-#table(align: left, columns: 1fr, stroke: .5pt)[`./code/test/FFDH/output1`][
+#table(align: left, columns: 1fr, stroke: .5pt)[`./code/outputs/FFDH/outputs/output1`][
 ```
 Debug Info:
 Height-decreasingly sorted item data:
@@ -161,17 +174,18 @@ Width:
 1 level: 17.00
 
 Position:
-Item 0: level 0
-Item 1: level 0
-Item 2: level 0
-Item 3: level 1
-Item 4: level 0
-Item 5: level 1
-Item 6: level 1
+Item 1: level 0, x: 0.00, y: 0.00
+Item 2: level 0, x: 6.00, y: 0.00
+Item 3: level 0, x: 11.00, y: 0.00
+Item 4: level 1, x: 0.00, y: 8.00
+Item 5: level 0, x: 15.00, y: 0.00
+Item 6: level 1, x: 7.00, y: 8.00
+Item 7: level 1, x: 11.00, y: 8.00
 ====================================
 The total height: 35.00
 The ideal height(Area / Width): 9.89
 The "minimum" height: 13.00
+
 ```
 ]
 
@@ -180,14 +194,14 @@ As the debug info show above, our program can figure out this case #text(green)[
 *Test 2*
 
 - Purpose: check the correctness in #fakebold[the normal case, with relatively large waste space]. 
-- Input: See the input file in directory `./code/test/FFDH/input2`
+- Input: See the input file in directory `./code/inputs/FFDH/inputs/input2`
 - Expected Result:
 
 #figure(image("images/3.png", width: 90%), caption: "Correctness Test 2 for FFDH Algorithm")
 
 - Actual Result:
 
-#table(align: left, columns: 1fr, stroke: .5pt)[`./code/test/FFDH/output2`][
+#table(align: left, columns: 1fr, stroke: .5pt)[`./code/outputs/FFDH/outputs/output2`][
 ```
 Debug Info:
 Height-decreasingly sorted item data:
@@ -206,12 +220,12 @@ Width:
 3 level: 17.00
 
 Position:
-Item 0: level 0
-Item 1: level 0
-Item 2: level 0
-Item 3: level 1
-Item 4: level 2
-Item 5: level 3
+Item 1: level 0, x: 0.00, y: 0.00
+Item 2: level 0, x: 4.00, y: 0.00
+Item 3: level 0, x: 10.00, y: 0.00
+Item 4: level 1, x: 0.00, y: 10.00
+Item 5: level 2, x: 0.00, y: 15.00
+Item 6: level 3, x: 0.00, y: 19.00
 ====================================
 The total height: 35.00
 The ideal height(Area / Width): 15.11
@@ -225,14 +239,14 @@ As the debug info show above, our program can figure out this case #text(green)[
 *Test 3*
 
 - Purpose: check the correctness in #fakebold[the large-scale case, with very large waste space]. 
-- Input: See the input file in directory `./code/test/FFDH/input3`
+- Input: See the input file in directory `./code/inputs/FFDH/inputs/input3`
 - Expected Result:
 
 #figure(image("images/4.png", width: 100%), caption: "Correctness Test 3 for FFDH Algorithm")
 
 - Actual Result:
 
-#table(align: left, columns: 1fr, stroke: .5pt)[`./code/test/FFDH/output3`][
+#table(align: left, columns: 1fr, stroke: .5pt)[`./code/outputs/FFDH/outputs/output3`][
 ```
 Debug Info:
 Height-decreasingly sorted item data:
@@ -255,13 +269,13 @@ Width:
 10000 level: 18.00
 
 Position:
-Item 0: level 0
-Item 1: level 0
-Item 2: level 1
-Item 3: level 2
+Item 0: level 0, x: 0.00, y: 0.00
+Item 1: level 0, x: 2.00, y: 0.00
+Item 2: level 1, x: 0.00, y: 10000.00
+Item 3: level 2, x: 0.00, y: 10001.00
 ...
-Item 10000: level 9999
-Item 10001: level 10000
+Item 10000: level 9999, x: 0.00, y: 19998.00
+Item 10001: level 10000, x: 0.00, y: 19999.00
 ====================================
 The total height: 20002.00
 The ideal height(Area / Width): 10000.20
@@ -269,13 +283,13 @@ The "minimum" height: 20000.00
 ```
 ]
 
-As the debug info show above, our program can figure out this case #text(green)[properly]. However, there is very big bias for the calculation of the algorithm calculated and the optimal solution, and $frac(F F G H(L), O P T(L)) approx 2$, where $F F D H(L)$ and $O P T(L)$ are the solution of FFFH algorithm and optimal solution respectively.
+As the debug info show above, our program can figure out this case #text(green)[properly]. However, there is very big bias for the calculation of the algorithm calculated and the optimal solution, and $frac(F F G H(L), O P T(L)) approx 2 lt.eq 2.7$, where $F F D H(L)$ and $O P T(L)$ are the solution of FFFH algorithm and optimal solution respectively.
 
 === Performance Tests
 
 #v(.5em)
 
-The dominant factor having infulence on the time complexity in FFDH algorithm is *the number of items*, i.e. the input size. Consequently, we will show the correlation between run time and input sizes by running our program in distinct input sizes, which are listed in the test table with corresponding results below.
+The dominant factor having infulence on the time complexity in FFDH algorithm is *the number of items*, i.e. the *input size*. Consequently, we will show the correlation between run time and input sizes by running our program in distinct input sizes, which are listed in the test table with corresponding results below.
 
 Note that our randomly-generated input data complies the #underline[uniform distribution], which means that all numbers within the specified range will be selected for equal possible(this description is not mathematically rigor, because the probability of choosing one single number is zero).
 
@@ -303,11 +317,7 @@ We use a *quadratic polynomial curve* fitting data point, and find that there is
 
 
 
-== Advanced Approximation Algorithm
 
-=== Correctness Tests
-
-=== Performance Tests
 
 = Chapter 4: Analysis and Comments
 
@@ -315,32 +325,40 @@ We use a *quadratic polynomial curve* fitting data point, and find that there is
 
 == Space Complexity
 
+#v(.5em)
+
 *Conclusion*:
 
+- BL algorithm:
 - FFDH algorithm: $O(N)$, $N$ is the number of items.
-- advanced approximation algorithm:
 
 *Analysis*:
+
+- BL algorithm:
 
 - FFDH algorithm: Except the single variables, we have used some arrays, including `rect[]`, `curWidth[]` and `pos[]`, which contain the infomation of items, current width for each level and the position of each item respectively. Apparently, the level is less than or equal to the number of items(we use $N$ to represent it). As a consequence, these three arrays are proportional to $N$, and the total space is less than $c dot N$, when $c$ is just a constant.
 
-- advanced approximation algorithm:
 
 == Time Complexity
 
+#v(.5em)
+
 *Conclusion*:
 
+- BL algorithm:
 - FFDH algorithm: $O(N^2)$, $N$ is the number of items.
-- advanced approximation algorithm:
+
 
 *Analysis*:
 
+- BL algorithm:
+
 - FFDH algorithm:
-  - Before putting all items into the bin serially, we use the built-in function `qsort()`(i.e. the quick sort) to sort these items by their height in decreasing order. As we known in FDS course, the average time complexity of quicksort is $O(N log N)$, and the worst time complexity is $O(N^2)$
-  - Now let's consider the core part of FFDH algorithm: it consists of a loop with two layers, the outer one corresponds to $N$ directly, the inner one is controlled by `level`. As we have analyzed in Space Complexity, `level` $lt.eq N$. So the overall time consumption of the loop is less than $c N^2$, when $c$ is a constant
-  - The last part of the algorithm is printing the debug info. Since it just prints the information of items sequentially, its time complexity is just $O(N)$
-  - In a nutshell, the total time complexity is $O(N^2)$
-- advanced approximation algorithm:
+  - Before putting all items into the bin serially, we use the built-in function `qsort()`(i.e. the quick sort) to sort these items by their height in decreasing order. As we known in FDS course, the average time complexity of quicksort is $O(N log N)$, and the worst time complexity is $O(N^2)$.
+  - Now let's consider the core part of FFDH algorithm: it consists of a loop with two layers, the outer one corresponds to $N$ directly, the inner one is controlled by `level`. As we have analyzed in Space Complexity, `level` $lt.eq N$. So the overall time consumption of the loop is less than $c N^2$, when $c$ is a constant.
+  - The last part of the algorithm is printing the debug info. Since it just prints the information of items sequentially, its time complexity is just $O(N)$.
+  - In a nutshell, the total time complexity is $O(N^2)$.
+
 
 == Further Improvement
 

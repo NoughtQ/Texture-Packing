@@ -36,8 +36,8 @@ def draw_rectangles(rectangles,canvas_width,output_file):
 
 for i in range(1, 4):
     # 文件路径
-    file_path = f'../test/FFDH/rectangle{i}.txt'
-    output_file = f'../test/FFDH/figure{i}.png'
+    file_path = f'../output/rects/rectangle{i}.txt'
+    output_file = f'../output/figs/figure{i}.png'
 
 # file_path = "../test/FFDH/rectangle.txt"
 # output_file = "../test/FFDH/figure.png"
