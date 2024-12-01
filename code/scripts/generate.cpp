@@ -1,6 +1,55 @@
 #include"header.h"
 using namespace std;
 
+int generate_main(int generateMode)
+{
+    fstream infile;
+    infile.open("generate_in.txt", ios::in);
+    
+    if(generateMode==2)
+    {
+        //mode 0: uniform int distribution
+        //mode 1：normal distribution(int)
+        //mode 2: uniform real distribution
+        //mode 3: normal distribution(double)
+        int i;
+        double maxHeight,maxWeight;
+        int num,mode,n;
+        string filename;
+
+        infile >> n;
+        for(i=0; i<n; i++)
+        {
+            infile >> maxHeight >> maxWeight >> num >> mode;
+            infile >> filename;
+            
+            vector<rectangle> recs;
+            recs = random_generate(maxHeight, maxWeight, num, mode);
+            printrecs(recs, maxHeight, maxWeight, filename); 
+        }
+    }
+    else if(generateMode==3)
+    {
+        int i;
+        double Height,Weight;
+        int hNum,wNum,n;
+        string filename;
+
+        infile >> n;
+        for(i=0; i<n; i++)
+        {
+            infile >> Height >> Weight >> hNum >> wNum;
+            infile >> filename;
+            
+            vector<rectangle> recs;
+            recs = square_generate(Height, Weight, hNum, wNum);
+            printrecs(recs, Height, Weight, filename); 
+        }
+    }
+    
+    return 1;
+}
+
 vector<rectangle> random_generate(double maxHeight,double maxWeight,int num, int mode)
 {
     vector<rectangle> recs;
@@ -107,7 +156,7 @@ vector<rectangle> square_generate(double Height,double Weight,int hNum, int wNum
 void printrecs(vector<rectangle> recs, double maxHeight, double maxWeight, string filename)
 {
     fstream outfile;
-    outfile.open("../data/"+filename, ios::out);
+    outfile.open(DATA_FILE+filename, ios::out);
 
     /*********************
      * test example:
@@ -127,7 +176,7 @@ void printrecs(vector<rectangle> recs, double maxHeight, double maxWeight, strin
 vector<rectangle> readRecs(std::string filename)
 {
     fstream infile;
-    infile.open("../data/"+filename, ios::in);
+    infile.open(DATA_FILE+filename, ios::in);
     vector<rectangle> recs;
     double maxWeight;
     int n;

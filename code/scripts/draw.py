@@ -34,10 +34,11 @@ def draw_rectangles(rectangles,canvas_width,output_file):
 
     plt.savefig(output_file, bbox_inches='tight', dpi=300)  # 保存图片到文件
 
-# 文件路径
-file_path = '/home/au/auua/Texture-Packing/code/rectangles.txt'
-output_file = '/home/au/auua/Texture-Packing/code/fig/fig.png'
+for i in range(0, 2):
+    # 文件路径
+    file_path = f'fig/recs/rectangles{i}.txt'
+    output_file = f'fig/fig{i}.png'
 
-# 读取数据并绘制
-rectangles,width = read_rectangles_from_file(file_path)
-draw_rectangles(rectangles,width,output_file)
+    # 读取数据并绘制
+    rectangles,width = read_rectangles_from_file(file_path)
+    draw_rectangles(rectangles,width,output_file)

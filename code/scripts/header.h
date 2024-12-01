@@ -10,6 +10,8 @@
 #include<string>
 #include<fstream>
 
+#define DATA_FILE "data/"
+
 typedef struct rectangle{
     double width;
     double height;
@@ -42,6 +44,7 @@ std::vector<rectangle> readRecs(std::string filename);
 std::vector<rectangle> random_generate(double maxHeight,double maxWeight,int num, int mode);
 std::vector<rectangle> square_generate(double Height,double Weight,int hNum, int wNum);
 void printrecs(std::vector<rectangle> recs, double maxHeight, double maxWeight, std::string filename);
+int generate_main(int generateMode);
 
 
 
