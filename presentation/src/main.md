@@ -49,7 +49,9 @@ The project require us to design **approximation algorithms** running in polynom
 ## BL Algorithm
 
 BL(Bottom-up left-justified) algorithm was first described by Baker et al.It works as follows:
+BL(Bottom-up left-justified) algorithm was first described by Baker et al.It works as follows:
 
+Let $L$ be a sequence of rectangular items. The algorithm iterates the sequence in the given order. For each considered item $r \in L$ , it searches for the bottom-most position to place it and then shifts it as far to the left as possible. Hence, <u>it places at the bottom-most left-most possible coordinate $(x, y)$ in the strip</u>.
 Let $L$ be a sequence of rectangular items. The algorithm iterates the sequence in the given order. For each considered item $r \in L$ , it searches for the bottom-most position to place it and then shifts it as far to the left as possible. Hence, <u>it places at the bottom-most left-most possible coordinate $(x, y)$ in the strip</u>.
 
 
@@ -76,6 +78,11 @@ Just like texture packing problem is the 2D version of bin packing problem, the 
 <div style="width: 100%">
 
 # Part 2. Algorithm Specification
+
+
+
+<!--v-->
+## BL Algorithm
 
 <!--v-->
 ## BL Algorithm 
