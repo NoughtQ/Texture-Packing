@@ -48,7 +48,9 @@ The project require us to design **approximation algorithms** running in polynom
 <!--v-->
 ## BL Algorithm
 
+BL(Bottom-up left-justified) algorithm was first described by Baker et al.It works as follows:
 
+Let $L$ be a sequence of rectangular items. The algorithm iterates the sequence in the given order. For each considered item $r \in L$ , it searches for the bottom-most position to place it and then shifts it as far to the left as possible. Hence, <u>it places at the bottom-most left-most possible coordinate $(x, y)$ in the strip</u>.
 
 
 <!--v-->
@@ -68,14 +70,22 @@ Just like texture packing problem is the 2D version of bin packing problem, the 
 </div>
 
 
+
 <!--s-->
 <div class="middle center">
 <div style="width: 100%">
 
 # Part 2. Algorithm Specification
 
+
+
 <!--v-->
-## Data Structure
+## BL Algorithm
+
+<!--v-->
+## FFDH Algorithm
+
+Data structure:
 
 <div class="mul-cols">
 <div class="col" style="width: 130%">
@@ -102,13 +112,9 @@ typedef struct item {
 
 
 <!--v-->
-## BL Algorithm
+## FFDH Algorithm (Con.)
 
-
-<!--v-->
-## FFDH Algorithm
-
-Parameters and Return values of the algorithm:
+Parameters and return values of the algorithm:
 
 **Inputs**:
 

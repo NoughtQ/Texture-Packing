@@ -4,7 +4,7 @@
 #include <string.h>
 #include <string>
 #include <time.h>
-#include "ttpHeader.h"
+#include "headers/ttpHeader.h"
 
 double Width;                // Fixed width of the resulting texture
 int n;                       // The number of items

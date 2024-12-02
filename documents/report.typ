@@ -28,6 +28,9 @@ The project require us to design #fakebold[approximation algorithms] running in 
 
 #v(.5em)
 
+#fakebold[BL algorithm] (Bottom-up left-justified algorithm) was first described by Baker et al. It works as follows: Let $L$ be a sequence of rectangular items. The algorithm iterates the sequence in the given order. For each considered item $r in L$ , it searches for the bottom-most position to place it and then shifts it as far to the left as possible. Hence, #underline[it places at the bottom-most left-most possible coordinate $(x,y)$ in the strip].
+
+
 === FFDH Algorithm
 
 #v(.5em)
@@ -40,6 +43,11 @@ Just like texture packing problem is the 2D version of bin packing problem, the 
 
 #figure(image("images/1.png", width: 95%), caption: "FFDH Approximation Algorithm")
 
+=== Mersenne Twister Algorithm
+
+#v(.5em)
+   
+The Mersenne Twister is an efficient pseudo-random number generator known for its long period and high-quality random numbers. It's based on a specific Mersenne prime (a prime number of the form \($2^p - 1$\)), using a 624-word state vector of 32-bit integers. It generates random numbers through a series of bit operations like shifts and masks. Widely used for its speed, long period, and randomness quality.
 
 
 = Chapter 2: Algorithm Specification
@@ -51,21 +59,142 @@ In this chapter, we will introduce approximation algorithms of FFDH(basic versio
 - Description of approximation algotithms with pseudocodes.
 - Calculation of approximation ratio of algorithm with proof.
 
-The main data structure we used is a `struct` called `Item`. Each `Item` contains four elements(all double values): `width`, `height`, `x` and `y`, which represent the width, the height and the lower left point of the item respectively.
-
-#figure(image("images/5.png", width: 37%), caption: [The `struct Item`])
-
 == BL Algorithm
 
 #v(.5em)
 
+First of all, we provide the pseudocode of BL algorithm below.
 
+#algo(
+  header: [
+    #fakebold[Procedure]:BL(_rect_: #fakebold[Item array], _W_: #fakebold[double], _n_: #fakebold[integer],  _isDebug_: #fakebold[bool], _debugFile_: #fakebold[string]) 
+  ],
+  block-align: left,
+)[
+  Begin #i\ 
+  Initialize upBound list with rightmost and initial points \
+  Set _maxHeight_ to 0 \
+  Sort _recs_ by width in descending order \
+
+  while there is _rec_ remained do #i\
+    Find the proper position of the rec \
+    Place the rectangle and update upBound \
+    Update _maxHeight_ if needed \
+    If _isDebug_, log upBound #d\
+  end \
+
+  If _isDebug_, log all _recs_ \
+  return _maxHeight_
+  End
+]
+
+Among them, upBound is maintained through a #fakebold[bidirectional linked list]. The implementation of the bidirectional linked list is to directly call the `list` in the STL container.The reason for using a bidirectional linked list is that we need to frequently insert and delete upBound, but the need for search operations is very small.
+
+Each element is a `POINT` structure as shown below.
+
+#table(align: left, columns: 1fr, stroke: .5pt)[
+
+```cpp
+struct POINT{
+    double x;
+    double y;
+    double width;
+
+    //Overload the equal operator
+    bool operator==(const POINT& other)
+    {
+        return x==other.x && y==other.y && width==other.width;
+    };
+};
+```
+
+]
+
+we determine a line segment by determining the left endpoint coordinates and the length of the line segment. we record all the line segments that can be covered by the projection from top to bottom in order from right to left.
+
+For example, for the following situation:
+
+#figure(image("images/6.png", width: 60%), caption: "An Example for Records of Line Segments")
+
+The upBound will be describe as below:
+
+#table(align: left, columns: 1fr, stroke: .5pt)[
+```
+x: 100 y: 0 width: 0        #Acting as a sentinel without affecting the results
+x: 97 y: 217 width: 3
+x: 59 y: 265 width: 38
+x: 55 y: 191 width: 4
+x: 53 y: 273 width: 2
+x: 38 y: 250 width: 15
+x: 30 y: 278 width: 8
+x: 0 y: 259 width: 30
+```
+]
+
+
+=== Algorithm Analysis
+
+#v(.5em)
+
+This algorithm is a 3-approximation algorithm after sorting the rectangles in descending order of width. Here is the proof:
+
+#let render(theme_name) = [
+  #state_block_theme.update(theme_name)
+
+  #proof(name: [Proof])[
+Let $h^*$ denote the the height of the lower edge of a tallest piece whose upper edge is at height $h_"BL"$. If $y$ denote the height of this piece, then $h_"BL"=h^*+y$.Let $A$ denote the region of the bin up to height $h^*$.
+
+Suppose $A$ is at least half occupied. Then we have $h_"OPT" gt.eq max(y,h^* / 2)$;
+
+hence, $y > h^* / 2$ implies:
+
+$
+frac(h_"BL", h_"OPT") lt.eq frac(y+h^*, y) < frac(y+2y, y)=3
+$
+
+and if $y lt.eq h^* / 2$, we have:
+
+$
+frac(h_"BL", h_"OPT") lt.eq frac(h^* / 2+h^*, h^* / 2)=3
+$
+
+As a result, we only need to show that $A$ is at least half occupied.
+
+We assert that for every horizontal line in area $A$, the sum of the lengths of the lines crossing the rectangle must be no less than the sum of the lengths of the lines crossing the blank area.(We can ignore all lines that cross the intersection of the rectangles, since obviously they have measure 0)
+
+This conclusion is guaranteed by the following facts:
+
+1. Each horizontal line must pass through a rectangle attached to the left edge. This is obvious because the width of the placed rectangle is decreasing.
+2. Assuming that the horizontal line $l$ passes through a blank area $S$, it is guaranteed by 1 that there must be a rectangle on its left. Secondly, it is obvious that the width of the rectangle on the left is greater than the width of $S$, which is guaranteed by the fact that the width of the rectangle placed in the upper layer must be greater than $S$ (if not, $S$ can be placed in a new rectangle, and the width of the upper rectangle is not greater than the rectangle on the left of $S$)
+
+Therefore, for each horizontal line l in A, it must meet our assertion.
+Integrating each line, it can be seen that half of the area in A is occupied.
+  ]
+
+  #v(.5em)
+]
+#render("thickness")
+
+=== BL_Change: A Failed Attempt
+
+#v(.5em)
+
+We try to optimize the order of rectangles. Divide all rectangles into two groups, one with a width less than w/2, and sort them in descending order of height/width; the other with a width greater than w/2, and sort them in descending order of width.
+
+This optimization order is based on the following observations:
+In the original algorithm, rectangles larger than w/2 are almost all arranged in a single row, resulting in a large waste of space on the right side.
+
+But we failed to do better in my implementation. This optimization algorithm only has a slight advantage in small and medium-sized data. When the data volume is large enough, it will cause greater space waste due to the defects of my own algorithm implementation.
 
 == FFDH Algorithm
 
 #v(.5em)
 
-Initially, let's take a look at the pseudocode of FFDH to gain a deeper insight into this kind of approximation algorithm.
+The main data structure we used is a `struct` called `Item`. Each `Item` contains four elements(all double values): `width`, `height`, `x` and `y`, which represent the width, the height and the lower left point of the item respectively.
+
+#figure(image("images/5.png", width: 30%), caption: [The `struct Item`])
+
+Now let's take a look at the pseudocode of FFDH to gain a deeper insight into this kind of approximation algorithm.
 
 #algo(
   header: [
@@ -82,6 +211,7 @@ Initially, let's take a look at the pseudocode of FFDH to gain a deeper insight 
     #fakebold[Procedure]: FFDH(_W_: #fakebold[double], _n_: #fakebold[integer], _rect_: #fakebold[Item array], _isDebug_: #fakebold[bool], _outFile_: #fakebold[bool]) 
   ],
   block-align: left,
+  breakable: true
 )[
   Begin #i\ 
   Sort _rect_[] by item's height in decreasing order \ 
@@ -120,9 +250,77 @@ We can divide the procedure into four steps:
 
 Now we should figure out the approximation ratio of this algorithm. It was proved that FFDH algorithm is a #fakebold[2.7-approximation algorithm] (the conclusion is given by Wikipedia). Because it is difficult for us to prove this approximation ratio based on our mathematical knowledge, and the relevant proof content cannot be directly checked on the Internet (need to pay to unlock the paper), so unfortunately the proof part is omitted.
 
+== Large-scale Random Number Generation Strategy
 
+#v(.5em)
 
+Here we only take the generation of uniformly distributed integers as an example. The codes for other types are similar.The following code only shows the most basic operations. With these distributed numbers, generating samples is easy.
 
+#table(align: left, columns: 1fr, stroke: .5pt)[
+```cpp
+#include<random>
+using namespace std;
+
+...
+    random_device seed;
+    mt19937 gen(seed());
+    
+    uniform_int_distribution<> height(1, maxHeight);
+    h = height(gen);
+...
+```
+]
+
+The basic process is to call `random_device` to generate a random number seed, call `mt19937` to generate a relatively high-quality pseudo-random number, and call the corresponding random distribution class to convert the pseudo-random number into the random variable we need.
+
+== Optimal Solution Sample Generation Strategy
+
+#v(.5em)
+
+#algo(
+  header: [
+    #fakebold[Procedure]: square_generate(_Height_: #fakebold[double], _Width_: #fakebold[double], _hNum_: #fakebold[integer], _wNum_: #fakebold[integer]) 
+  ],
+  block-align: left,
+  breakable: true
+)[
+  Begin #i\ 
+    Initialize _recs_ as an empty vector \
+    Initialize random number generator _gen_ \
+    Initialize uniform distributions height and width \
+    \
+    Initialize vectors _hp_ and _wp_ \
+    Add 0 and _Height_ to _hp_ \
+    Add 0 and _Width_ to _wp_ \
+    \
+    while (the size of _hp_ is less than _hNum_ + 1) do #i \
+        Generate a random number _h_ \
+        If _h_ is not in _hp_ then #i \
+            Add _h_ to _hp_ #d \
+        end #d\
+    end \
+    \ 
+    while (the size of _wp_ is less than _wNum_ + 1) do #i \
+        Generate a random number _w_ \
+        If _w_ is not in _wp_ then #i \
+            Add _w_ to _wp_ #d \
+        end #d \
+    end \
+    \
+    Sort _hp_ and _wp_ \
+    \
+    for _i_ from 1 to _hNum_ do #i \
+        for _j_ from 1 to _wNum_ do #i \
+            Calculate the width and height of the rectangle \
+            Add the rectangle to _recs_ #d \
+        end #d \
+    end \
+    \
+    return _recs_ #d \
+  End
+]
+
+As shown in the pseudo code, the large rectangle is divided into _hNum_ $dot$ _wNum_ blocks by generating split points on the edges of the large rectangle.
 
 
 = Chapter 3: Testing Results
@@ -135,10 +333,130 @@ In this chapter, we will test our approximation algorithms to check their correc
 
 === Correctness Tests
 
+#v(.5em)
+
+How to verify the correctness of an approximate algorithm? We think that it is only necessary to ensure that the approximate algorithm runs as expected and does not violate the requirements.
+
+The following three examples test three typical situations: 
+
+- The first group is a simple case of a full square, which is easy to judge whether the logic is correct. 
+- The second group is a more general rectangle, which can be used to see whether the more complex position relationship is correct. 
+- The third group is a special case where there is an optimal solution, in which the sizes of the rectangles are close and there are no extreme rectangles. It can be seen that in the newer version.
+
+*Sample 1*
+
+- Input: 10 squares with a side length of 6 and the width is 20
+- Output figure:
+  
+#figure(image("images/7.png", width: 60%), caption: "Correctness Test 1 for BL Algorithm")
+
+- Comment: The result is as expected.
+
+*Sample 2*
+
+- Input: 10 randomly generated rectangles and the width is 100
+
+#table(align: left, columns: 1fr, stroke: .5pt)[
+```
+100 10
+99 54
+2 82
+8 28
+38 99
+59 51
+78 86
+30 9
+3 51
+39 26
+53 59
+```
+]
+
+- Output figure:
+  
+#figure(image("images/8.png", width: 60%), caption: "Correctness Test 2 for BL Algorithm")
+
+- Comment: The result is as expected.
+
+*Sample 3*
+
+- Input：This is an example of random rectangles generated by the second type of random rectangles introduced above. The size of the large rectangle is 400 $times$ 200, and a total of `4*4` rectangles are generated.
+  
+
+
+#table(align: left, columns: 1fr, stroke: .5pt)[
+```
+200 16
+86 272
+5 272
+45 272
+64 272
+86 72
+5 72
+45 72
+64 72
+86 13
+5 13
+45 13
+64 13
+86 43
+5 43
+45 43
+64 43
+```
+]
+
+- Output figure:
+  
+#figure(image("images/9.png", width: 60%), caption: "Correctness Test 3 for BL Algorithm")
+
+- Comment: The result is as expected.
+
 === Performance Tests
 
+#v(.5em)
+
+In order to simulate the real scene as realistically as possible, we selected samples generated by uniform distribution and normal distribution for time testing.
+
+Since there is no essential difference between the floating point case and the integer case, 
+only the integer case is analyzed here.
 
 
+*Uniform distribution*
+
+#figure(
+  table( 
+    fill: (x, y) =>
+    if x == 0 {
+      gray.lighten(80%)
+    },
+    align: center + horizon,
+    columns: (1fr, 1fr, 1fr), [File name], [Size], [Time(s)], [uniform_int_10], [10], [0.00029159], [uniform_int_50], [50], [0.000112231], [uniform_int_100], [100], [0.0004264], [uniform_int_500], [500], [0.001882206], [uniform_int_1000], [1000], [0.006107088], [uniform_int_5000], [5000], [0.0226485], [uniform_int_10000], [10000], [0.0588621], ), caption: "Performance Tests for BL Algorithm in Uniform Distribution"
+)
+
+The curve is drawn as follows:
+
+#figure(image("images/BL_diagram_Ui.png", width: 100%), caption: "Curve Diagram for BL Algorithm in Uniform Distribution")
+
+*Normal distribution*
+
+#figure(
+  table( 
+    fill: (x, y) =>
+    if x == 0 {
+      gray.lighten(80%)
+    },
+    align: center + horizon,
+    columns: (1fr, 1fr, 1fr), [File name], [Size], [Time(s)], [normal_int_10], [10], [0.000039636], [normal_int_50], [50], [0.000127671], [normal_int_100], [100], [0.00043265], [normal_int_500], [500], [0.001962675], [normal_int_1000], [1000], [0.00571202], [normal_int_5000], [5000], [0.02116575], [normal_int_10000], [10000], [0.05734626], ), caption: "Performance Tests for BL Algorithm in Normal Distribution"
+)
+
+The curve is drawn as follows:
+
+#figure(image("images/BL_diagram_Ni.png", width: 100%), caption: "Curve Diagram for BL Algorithm in Normal Distribution")
+
+*Analysis*:
+
+From the time complexity analysis in chapter 4, we can see that the time complexity of the BL algorithm is $O(n^2)$. However, in actual measurement, the secondary factor is not significant. The main reason may be that it is difficult for `upBound` to maintain an average size of $O(n)$ when the data scale is small, making the primary factor more prominent.
 
 == FFDH Algorithm
 
@@ -146,7 +464,7 @@ In this chapter, we will test our approximation algorithms to check their correc
 
 #v(.5em)
 
-*Test 1*
+*Sample 1*
 
 - Purpose: check the correctness in #fakebold[the normal case, with relatively small waste space]. 
 - Input: See the input file in directory `./code/inputs/FFDH/inputs/input1`
@@ -191,7 +509,7 @@ The "minimum" height: 13.00
 
 As the debug info show above, our program can figure out this case #text(green)[properly].
 
-*Test 2*
+*Sample 2*
 
 - Purpose: check the correctness in #fakebold[the normal case, with relatively large waste space]. 
 - Input: See the input file in directory `./code/inputs/FFDH/inputs/input2`
@@ -236,7 +554,7 @@ The "minimum" height: 22.00
 As the debug info show above, our program can figure out this case #text(green)[properly]. However, there is some bias for the calculation of the algorithm calculated and the optimal solution.
 
 
-*Test 3*
+*Sample 3*
 
 - Purpose: check the correctness in #fakebold[the large-scale case, with very large waste space]. 
 - Input: See the input file in directory `./code/inputs/FFDH/inputs/input3`
@@ -315,9 +633,35 @@ Based on the table above, we use a Python program to draw the curve diagram of r
 
 We use a *quadratic polynomial curve* fitting data point, and find that there is such a curve, $y = 4.19 times 10^(-10) x^2 + 2.89 times 10^(-6) x + 3.83 times 10^(-2)$, that can pass almost all the data points, which shows that the FFDH algorithm can complete the calculation within the quadratic polynomial time. The theoretical analysis of time complexity will be explained in Chapter 4.
 
+== Comparative Analysis
+
+=== FFDH Advantages analysis
+
+#v(.5em)
+
+Take the result graph generated by uniform_int_100 test data as an example.
 
 
 
+#set text(size: 10pt)
+
+#grid(columns: (1fr, 1fr, 1fr))[#figure(image("images/10.png"), caption: "Ui_100_BL.png")][#figure(image("images/11.png"), caption: "Ui_100_C.png")][#figure(image("images/12.png"), caption: "Ui_100_F.png")]
+
+#set text(size: 14pt)
+
+It can be seen that the FFDH algorithm has a higher space utilization rate. The main reason is that BL and even the failed improved algorithms of BL cannot solve the huge space waste caused by sorting by width. For example, in the BL algorithm, after sorting by width, all rectangles with a width greater than w/2 have to be arranged in a separate row, and the degree of space waste on the other side is much greater than the degree of space waste in the vertical direction of the FFDH algorithm.
+This makes the FFDH algorithm obtain better results in almost all our test samples.
+
+=== Failure of algorithm improvement
+
+#v(.5em)
+
+Here is a more detailed explanation of the failure of the BL_change algorithm. Take the generated image of the normal_int_10000 test data as an example.
+
+#grid(columns: (1fr, 1fr))[#figure(image("images/13.png"), caption: "Ni_100_BL.png")][#figure(image("images/14.png"), caption: "Ni_100_C.png")]
+
+There is a very obvious anomaly in the upper half of the image of the improved algorithm. The reason is that I did not fully implement the BL algorithm to put the rectangle as far to the left as possible (my implementation method was to put the rectangle at the lowest position that can be placed, and then take the leftmost position node).
+However, due to time constraints, we were unable to fix this problem.
 
 = Chapter 4: Analysis and Comments
 
@@ -329,14 +673,22 @@ We use a *quadratic polynomial curve* fitting data point, and find that there is
 
 *Conclusion*:
 
-- BL algorithm:
-- FFDH algorithm: $O(N)$, $N$ is the number of items.
+Both BL algorithm and FFDH algorithm are $O(N)$, where$N$ is the number of items.
 
 *Analysis*:
 
-- BL algorithm:
+- #fakebold[BL algorithm]:
+  - Storing rectangle information:
+    - Rectangle information is stored in `vector<rectangle> *recs`, with a space complexity of $O(N)$.
+  - Store upper bound information:
+    - The upBound list stores the upper bound information, which contains $n$ elements in the worst case, and has a space complexity of $O(N)$.
+  - Temporary variables and auxiliary data structures:
+    - vector<POINT> kill is used to store the points to be deleted, which contains $n$ elements in the worst case, and has a space complexity of $O(N)$.
+    - Other temporary variables (such as height, rightPoint, pointCase, etc.) occupy constant space, and have a space complexity of $O(1)$.
 
-- FFDH algorithm: Except the single variables, we have used some arrays, including `rect[]`, `curWidth[]` and `pos[]`, which contain the infomation of items, current width for each level and the position of each item respectively. Apparently, the level is less than or equal to the number of items(we use $N$ to represent it). As a consequence, these three arrays are proportional to $N$, and the total space is less than $c dot N$, when $c$ is just a constant.
+  Based on the above analysis, the space complexity of the entire algorithm is $O(N)$.
+
+- #fakebold[FFDH algorithm]: Except the single variables, we have used some arrays, including `rect[]`, `curWidth[]` and `pos[]`, which contain the infomation of items, current width for each level and the position of each item respectively. Apparently, the level is less than or equal to the number of items(we use $N$ to represent it). As a consequence, these three arrays are proportional to $N$, and the total space is less than $c dot N$, when $c$ is just a constant.
 
 
 == Time Complexity
@@ -345,15 +697,26 @@ We use a *quadratic polynomial curve* fitting data point, and find that there is
 
 *Conclusion*:
 
-- BL algorithm:
-- FFDH algorithm: $O(N^2)$, $N$ is the number of items.
+Both BL algorithm and FFDH algorithm are $O(N^2)$, where$N$ is the number of items.
 
 
 *Analysis*:
 
-- BL algorithm:
+- #fakebold[BL algorithm]:
 
-- FFDH algorithm:
+  - #fakebold[Initialization and sorting]:
+    - `sort`: The time complexity of the sorting operation is $O(N log N)$.
+  - #fakebold[Main loop]:
+    - The main loop `while (cnt < (*recs).size())` runs $n$ times.
+    - In each loop, the inner loop `for (auto p=upBound.begin(); p!=upBound.end(); p++)` traverses the upBound list. The length of the upBound list can reach $n$ in the worst case, so the time complexity of the inner loop is $O(N)$.
+    - In the inner loop, there is also a nested loop `for (auto it=p; it!=upBound.begin(); it--)`, which also needs to traverse the upBound list in the worst case, with a time complexity of $O(N)$.
+    - Overall, the time complexity of the main loop is $O(N^2)$.
+  - #fakebold[Insert and delete operations]:
+    - Operations such as `upBound.insert(p, {...})` and `upBound.remove(*p)` require $O(1)$ time in the worst case, because upBound is a linked list.
+
+  Based on the above analysis, the time complexity of the entire algorithm is $O(N^2)$.
+
+- #fakebold[FFDH algorithm]:
   - Before putting all items into the bin serially, we use the built-in function `qsort()`(i.e. the quick sort) to sort these items by their height in decreasing order. As we known in FDS course, the average time complexity of quicksort is $O(N log N)$, and the worst time complexity is $O(N^2)$.
   - Now let's consider the core part of FFDH algorithm: it consists of a loop with two layers, the outer one corresponds to $N$ directly, the inner one is controlled by `level`. As we have analyzed in Space Complexity, `level` $lt.eq N$. So the overall time consumption of the loop is less than $c N^2$, when $c$ is a constant.
   - The last part of the algorithm is printing the debug info. Since it just prints the information of items sequentially, its time complexity is just $O(N)$.
@@ -363,6 +726,15 @@ We use a *quadratic polynomial curve* fitting data point, and find that there is
 == Further Improvement
 
 #v(.5em)
+
+1. #fakebold[Algorithm Refinement]: 
+  - Use a modified version of the RF algorithm. First, put rectangles with a width greater than w/2 at the bottom in order. Then sort rectangles with a width less than w/2 by height. Take a layer from the remaining rectangles each time (similar to the FFDH algorithm), and then alternately descend (similar to BL, but once as close to the lower right as possible, once as close to the lower left as possible, and alternately).
+  - Since the RF algorithm is a 2-approximation algorithm, this algorithm can probably also be close to 2-approximation.
+
+
+2. #fakebold[Testing sample construction]: Although we come up with some samples for correctness tests, probably some crucial tests are still lost, and potential bugs may exists in our programs owing to our incomplete consideration. From our standpoint, it's difficult to find all cases for a program, but we're fully convinced that by delicate techniques and tricks for testing results, we can come up with tests as complete as possible.
+
+3. #fakebold[Original algorithm design]: Since there are many approximation algorithms that solve such problems nowadays, and our ability and time are limited, the two algorithms we implemented are actually based on existing algorithms (but we only refer to the algorithm theory, the code is our originality). In the future, with the comprehensive understanding of the approximity algorithm, we believe that we have the ability to design a completely original approximate algorithm.
 
 = Appendix: Source code
 
@@ -375,44 +747,72 @@ We use a *quadratic polynomial curve* fitting data point, and find that there is
 │   ├── README.md
 │   ├── build
 │   │   └── Makefile
-│   ├── scripts
-│   │   ├── generate.cpp
-│   │   ├── ttpHeader.h
-│   │   ├── ttpMain.cpp
-│   │   ├── FFDH.cpp
-│   │   ├── curve.py
-│   │   └── 
-│   └── test
-│       ├── FFDH
-│       │   ├── input1
-│       │   ├── input2
-│       │   ├── input3
-│       │   ├── output1
-│       │   ├── output2
-│       │   └── output3
-│       └── 
+│   ├── fig
+│   ├── inputs
+│   │   ├── BL
+│   │   └── FFDH
+│   ├── outputs
+│   │   ├── BL
+│   │   └── FFDH
+│   └── scripts
+│       ├── headers
+│       │   ├── header.h
+│       │   └── ttpHeader.h
+│       ├── BL.cpp
+│       ├── BLMain.cpp
+│       ├── generate.cpp
+│       ├── generate_main.cpp
+│       ├── ttpMain.cpp
+│       ├── FFDH.cpp
+│       ├── curve.py
+│       └── draw.py
 └── documents
     └── report.pdf
   ```
 ]
 
-== ttpHeader.cpp
+== header.h
 
-#importCode("../code/scripts/ttpHeader.h")
+#importCode("../code/scripts/headers/header.h")
 
-== ttpMain.cpp
+== BL.cpp
 
-#importCode("../code/scripts/ttpMain.cpp")
+#importCode("../code/scripts/BL.cpp")
+
+== BLMain.cpp
+
+#importCode("../code/scripts/BLMain.cpp")
+
+== ttpHeader.h
+
+#importCode("../code/scripts/headers/ttpHeader.h")
 
 == FFDH.cpp
 
 #importCode("../code/scripts/FFDH.cpp")
 
+== ttpMain.cpp
+
+#importCode("../code/scripts/ttpMain.cpp")
+
+== generate.cpp
+
+#importCode("../code/scripts/generate.cpp")
+
+== generate_main.cpp
+
+#importCode("../code/scripts/generate_main.cpp")
+
+
 = References
 
 #v(.5em)
 
-1. Wikipedia, Strip packing problem, #link("https://en.wikipedia.org/wiki/Strip_packing_problem")[#text(fill: blue)[https://en.wikipedia.org/wiki/Strip_packing_problem]]
+1. Wikipedia. Strip packing problem, #link("https://en.wikipedia.org/wiki/Strip_packing_problem")[#text(fill: blue)[https://en.wikipedia.org/wiki/Strip_packing_problem]]
+
+2. Brenda S. Baker, E. G. Coffman, JR and Ronald L. Rivest, _Orthogonal Packings in Two Dimensions_, #link("https://epubs.siam.org/doi/abs/10.1137/0209064")[#text(fill: blue)[https://epubs.siam.org/doi/abs/10.1137/0209064]]
+
+3. E. G. Coffman, JR., M. R. Garey, D. S. Johnson, and R. E. Tarjan, _Performance Bounds for Level-Oriented Two-Dimensional Packing Algorithms_, #link("https://epubs.siam.org/doi/abs/10.1137/0209062")[#text(fill: blue)[https://epubs.siam.org/doi/abs/10.1137/0209062]] 
 
 = Declaration
 
