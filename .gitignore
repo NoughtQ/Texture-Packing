@@ -2,6 +2,7 @@
 report-template
 output
 random_data
+hxy
 
 *.o
 *.exe

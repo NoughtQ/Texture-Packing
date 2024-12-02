@@ -48,7 +48,9 @@ The project require us to design **approximation algorithms** running in polynom
 <!--v-->
 ## BL Algorithm
 
+BL(Bottom-up left-justified) algorithm was first described by Baker et al.It works as follows:
 
+Let $L$ be a sequence of rectangular items. The algorithm iterates the sequence in the given order. For each considered item $r \in L$ , it searches for the bottom-most position to place it and then shifts it as far to the left as possible. Hence, <u>it places at the bottom-most left-most possible coordinate $(x, y)$ in the strip</u>.
 
 
 <!--v-->
@@ -68,6 +70,7 @@ Just like texture packing problem is the 2D version of bin packing problem, the 
 </div>
 
 
+
 <!--s-->
 <div class="middle center">
 <div style="width: 100%">
@@ -75,7 +78,72 @@ Just like texture packing problem is the 2D version of bin packing problem, the 
 # Part 2. Algorithm Specification
 
 <!--v-->
-## Data Structure
+## BL Algorithm 
+
+Data structure:
+
+```cpp
+// structure of a single item
+struct POINT{
+    double x;
+    double y;
+    double width;
+
+    //Overload the equal operator
+    bool operator==(const POINT& other)
+    {
+        return x==other.x 
+          && y==other.y 
+          && width==other.width;
+    };
+};
+```
+
+
+
+<!--v-->
+## BL Algorithm (Con.)
+
+Pseudocode:
+
+<div style="text-align: center; margin-top: -30px">
+  <img src="images/8.png" width="80%">
+</div>
+
+<!--v-->
+## Approximation Ratio of BL Algorithm
+
+**Conclusion**: BL algorithm is a 3-approximation algorithm.
+
+**Proof**:
+
+- $h^*$: the height of the lower edge of a tallest piece
+- $h_{\text{BL}} = h^* + y$
+- $A$: the region of the bin up to height $h^*$
+- Suppose $A$ is at least half occupied. Then we have $h_{\text{OPT}} \ge \text{max}(y,h^*/2)$
+  - $y \gt h^*/2$: $\frac{h_{\text{BL}}}{h_{\text{OPT}}} \le \frac{y+h^*}{y} \lt \frac{y+2y}{y}=3$
+  - $y \le h^*/2$: $\frac{h_{\text{BL}}}{h_{\text{OPT}}} \le \frac{h^*/2+h^*}{h^*/2}=3$
+
+<!--v-->
+## Proof of Approximation Ratio (Con.)
+
+Now let's prove that $A$ is at least half occupied.
+
+We assert that for every horizontal line in area $A$, the sum of the lengths of the lines crossing the rectangle must be no less than the sum of the lengths of the lines crossing the blank area.
+
+1. Each horizontal line must pass through a rectangle attached to the left edge. 
+
+<!--v-->
+## Proof of Approximation Ratio (Con.)
+
+2. Assuming that the horizontal line $l$ passes through a blank area $S$, 
+  - it is guaranteed by 1 that there must be a rectangle on its left. 
+  - Secondly, it is obvious that the width of the rectangle on the left is greater than the width of $S$, which is guaranteed by the fact that the width of the rectangle placed in the upper layer must be greater than $S$ (if not, $S$ can be placed in a new rectangle, and the width of the upper rectangle is not greater than the rectangle on the left of $S$)
+
+<!--v-->
+## FFDH Algorithm
+
+Data structure:
 
 <div class="mul-cols">
 <div class="col" style="width: 130%">
@@ -102,13 +170,9 @@ typedef struct item {
 
 
 <!--v-->
-## BL Algorithm
+## FFDH Algorithm (Con.)
 
-
-<!--v-->
-## FFDH Algorithm
-
-Parameters and Return values of the algorithm:
+Parameters and return values of the algorithm:
 
 **Inputs**:
 
@@ -166,8 +230,22 @@ Now we should figure out the approximation ratio of this algorithm. It was prove
 # Part 3. Test Results
 
 <!--v-->
-## BL Algorithm
+## BL Algorithm -- Correctness Tests
 
+<div class="mul-cols">
+<div class="col">
+
+**Input 1**: Input: 10 squares with a side length of 6 and the width is 20
+
+</div>
+<div class="col" style="width: 120%">
+
+<div style="text-align: center">
+  <img src="images/2.png" width="80%">
+</div>
+
+</div>
+</div>
 
 <!--v-->
 ## FFDH Algorithm -- Correctness Tests
@@ -199,7 +277,7 @@ Now we should figure out the approximation ratio of this algorithm. It was prove
   <img src="images/2.png" width="80%">
 </div>
 
-<div style="text-align: center; margin-top: 18pt">Expected Result</div>
+<div style="text-align: center; margin-top: 18pt; margin-left: 50pt">Expected Result</div>
 
 </div>
 <div class="col" style="width: 100%">
