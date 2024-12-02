@@ -67,7 +67,7 @@ First of all, we provide the pseudocode of BL algorithm below.
 
 #algo(
   header: [
-    #fakebold[Procedure]:BL(_recs_: #fakebold[POINT array], _W_: #fakebold[double], _n_: #fakebold[integer],  _isDebug_: #fakebold[bool], _debugFile_: #fakebold[string]) 
+    #fakebold[Procedure]:BL(_rect_: #fakebold[POINT array], _W_: #fakebold[double], _n_: #fakebold[integer],  _isDebug_: #fakebold[bool], _debugFile_: #fakebold[string]) 
   ],
   block-align: left,
 )[
@@ -84,7 +84,7 @@ First of all, we provide the pseudocode of BL algorithm below.
   end \
 
   If _isDebug_, log all _recs_ \
-  return _maxHeight_ #d \ 
+  return _maxHeight_ #d \
   End
 ]
 
@@ -747,6 +747,7 @@ Both BL algorithm and FFDH algorithm are $O(N^2)$, where$N$ is the number of ite
 │   ├── README.md
 │   ├── build
 │   │   └── Makefile
+│   ├── fig
 │   ├── inputs
 │   │   ├── BL
 │   │   └── FFDH
