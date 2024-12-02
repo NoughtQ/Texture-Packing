@@ -1,5 +1,40 @@
 # The Guide of How to Run Our Program
 
+这里是中文版的说明，下面英文说明仅针对于运行ttpMain。这里针对generate和BLMain做一些补充说明。
+
+1. 生成可执行文件的步骤相同，只需要到`./code/build/`使用`make`或`mingw32-make`命令即可。
+
+2. `generate`的使用比较繁琐，它仅支持通过文件输入，输入文件的位置在`./code/input/generate/generate_in.txt`。文件输入格式在generate_main.cpp的注释中比较详细的说明了，这里就直接粘贴过来了
+
+    ```cpp
+    /**************** 
+     * @ generate_in file format:
+     * generateMode(decide the mode of the generation)
+     * n(number of test cases you want to generate)
+     * 
+     * @ generateMode 1
+     * maxHeight_1 maxWeight_1 num_1 mode_1 filename_1
+     * ...
+     * maxHeight_n maxWeight_n num_n mode_n filename_n
+     * 
+     * @ generateMode 2
+     * Height_1 Weight_1 hNum_1 wNum_1 filename_1
+     * ...
+     * Height_n Weight_n hNum_n wNum_n filename_n
+    *****************/
+    ```
+
+    其中更具体的参数说明，还请参考程序中的注释，这里不多加赘述。
+
+    （如果不想研究，也可以直接赋值同目录位置的`sample1`和`sample2`到`generate_in.txt`中以生成测试文件，或者直接使用我们提供的测试样例）
+
+3. `BLMain`在运行后，引导已经较为充分，这里仅做简短补充。
+
+    - 首先，文件输入只支持在`.\code\input\`下的文件名（需完整输入）
+    - 如果不开启`test mode`即意为开启`debug mode`，在`debug mode`会生成`upBound`的更新信息以及最后的矩形位置结果在`./code/outputs/BL/debug/`下的`debugfile_BL.txt`和`debugfile_BL_Change.txt`中。同时也会在`./code/outputs/BL/recs/`中生成用于可视化的文件。
+
+4. `./code/scripts/pycode/`中的两个python文件仅是为了绘制曲线和可视化结果所用。由于只针对比较特殊的文件，若真正运行，可能需要修改一些细节。由于这不是项目的主要内容，这里不过多展开。
+
 ## Prerequisite
 
 - It's highly recommended that using **Windows OS** to run our program(like powershell), because our development environment is Windows, and we haven't tested whether our program works well in other OS.

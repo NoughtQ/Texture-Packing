@@ -92,7 +92,7 @@ vector<rectangle> random_generate(double maxHeight,double maxWeight,int num, int
 //Weight: the width of the large rectangle
 //hNum: the number of rows
 //wNum: the number of columns
-vector<rectangle> square_generate(double Height,double Weight,int hNum, int wNum)
+vector<rectangle> square_generate(double Height,double Width,int hNum, int wNum)
 {
     vector<rectangle> recs;
     //make sure the random number is different every time
@@ -102,7 +102,7 @@ vector<rectangle> square_generate(double Height,double Weight,int hNum, int wNum
 
     //Use uniform distribution
     uniform_int_distribution<> height(1, Height-1);
-    uniform_int_distribution<> weight(1, Weight-1);
+    uniform_int_distribution<> weight(1, Width-1);
 
     //hp: point on the height edge
     //wp: point on the weight edge
@@ -112,7 +112,7 @@ vector<rectangle> square_generate(double Height,double Weight,int hNum, int wNum
     hp.push_back(0);
     wp.push_back(0);
     hp.push_back(Height);
-    wp.push_back(Weight);
+    wp.push_back(Width);
     while(hp.size()<hNum+1)
     {
         int h = height(gen);

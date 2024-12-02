@@ -15,7 +15,7 @@ test:
 
     //open the file
     fstream infile, outfile[2];
-    for(i=0; i<1; i++)
+    for(i=0; i<2; i++)
         outfile[i].open(recFile+to_string(i)+".txt", ios::out);    
     
     //input the data test file name

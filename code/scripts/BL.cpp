@@ -63,7 +63,7 @@ double BL(vector<rectangle> *recs, double width, bool isDebug, string debugFile)
             if((*recs)[cnt].width <= (*p).width)
             {
                 //If the height of the current point is lower than the previous one
-                if(height > (*p).y)
+                if(height >= (*p).y)
                 {
                     //Update the height of the rec
                     height = (*p).y;
@@ -92,7 +92,7 @@ double BL(vector<rectangle> *recs, double width, bool isDebug, string debugFile)
                 //and the height of the current point is lower than the previous one
                 if(flag)
                 {
-                    if(height > (*p).y)
+                    if(height >= (*p).y)
                     {
                         height = (*p).y;
                         rightPoint = p;
@@ -286,7 +286,7 @@ double BL_change(vector<rectangle> *recs, double width, bool isDebug, string deb
             if(narrowRecs[cnt].width <= (*p).width)
             {
                 //If the height of the current point is lower than the previous one
-                if(height > (*p).y)
+                if(height >= (*p).y)
                 {
                     //Update the height of the rec
                     height = (*p).y;
@@ -315,7 +315,7 @@ double BL_change(vector<rectangle> *recs, double width, bool isDebug, string deb
                 //and the height of the current point is lower than the previous one
                 if(flag)
                 {
-                    if(height > (*p).y)
+                    if(height >= (*p).y)
                     {
                         height = (*p).y;
                         rightPoint = p;

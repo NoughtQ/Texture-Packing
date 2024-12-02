@@ -8,7 +8,7 @@ HEAD_DIR = ../scripts/headers
 BUILD_DIR = 
 
 FILES = scripts/ttpMain.cpp scripts/FFDH.cpp
-OBJS = main.o func.o generate.o ttpMain.o  FFDH.o
+OBJS = BLMain.o generate.o ttpMain.o  FFDH.o BL.o generate_main.o
 TARGET = ttpMain BLMain generate
 EXE = ttpMain.exe generate.exe BLMain.exe
 
