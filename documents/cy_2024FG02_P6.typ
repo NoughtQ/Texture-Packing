@@ -8,9 +8,9 @@
   cover_image_size: 50%,
   cover_image_padding: 1em,
   semester: "2024-2025 Autumn&Winter",
-  // author: [Huang Xingyao\ $quad quad$ Qian Ziyang],
+  author: [Huang Xingyao\ $quad quad$ Qian Ziyang],
   school_id: "",
-  date: "2024-12-02",
+  date: "2024-12-05",
   table_of_contents: true
 )
 
@@ -20,7 +20,7 @@
 
 #v(.5em)
 
-The project require us to design #fakebold[approximation algorithms] running in polynomial time to solve #fakebold[Texture Packing] problem. We can regard it as a #underline[2-dimension bin packing], with items("rectangle texture" in the problem) and bins("resulting texture" in the problem) having both width and height, but we only need a single bin with #fakebold[bounded width] and #fakebold[unbounded height], and we should keep the bin with a (nearly) minimum height.
+The project requires us to design #fakebold[approximation algorithms] running in polynomial time to solve #fakebold[Texture Packing] problem. We can regard it as a #underline[2-dimension bin packing], with items("rectangle texture" in the problem) and bins("resulting texture" in the problem) having both width and height, but we only need a single bin with #fakebold[bounded width] and #fakebold[unbounded height], and we should keep the bin with a (nearly) minimum height.
 
 == Backgound of Algorithms
 
@@ -99,11 +99,15 @@ struct POINT{
     double x;
     double y;
     double width;
+    double height;
 
     //Overload the equal operator
     bool operator==(const POINT& other)
     {
-        return x==other.x && y==other.y && width==other.width;
+        return x == other.x 
+            && y == other.y 
+            && width == other.width 
+            && height == other.height;
     };
 };
 ```
@@ -184,7 +188,7 @@ We try to optimize the order of rectangles. Divide all rectangles into two group
 This optimization order is based on the following observations:
 In the original algorithm, rectangles larger than w/2 are almost all arranged in a single row, resulting in a large waste of space on the right side.
 
-But we failed to do better in my implementation. This optimization algorithm only has a slight advantage in small and medium-sized data. When the data volume is large enough, it will cause greater space waste due to the defects of my own algorithm implementation.
+But we failed to do better in our implementation. This optimization algorithm only has a slight advantage in small and medium-sized data. When the data volume is large enough, it will cause greater space waste due to the defects of our own algorithm implementation.
 
 == FFDH Algorithm
 
@@ -431,7 +435,7 @@ only the integer case is analyzed here.
       gray.lighten(80%)
     },
     align: center + horizon,
-    columns: (1fr, 1fr, 1fr), [File name], [Size], [Time(s)], [uniform_int_10], [10], [0.00029159], [uniform_int_50], [50], [0.000112231], [uniform_int_100], [100], [0.0004264], [uniform_int_500], [500], [0.001882206], [uniform_int_1000], [1000], [0.006107088], [uniform_int_5000], [5000], [0.0226485], [uniform_int_10000], [10000], [0.0588621], ), caption: "Performance Tests for BL Algorithm in Uniform Distribution"
+    columns: (1fr, 1fr, 1fr), [File name], [Size], [Time(s)], [uniform_int_10], [10], [0.00029159], [uniform_int_50], [50], [0.000112231], [uniform_int_100], [100], [0.0004264], [uniform_int_500], [500], [0.001882206], [uniform_int_1000], [1,000], [0.006107088], [uniform_int_5000], [5,000], [0.0226485], [uniform_int_10000], [10,000], [0.0588621], ), caption: "Performance Tests for BL Algorithm in Uniform Distribution"
 )
 
 The curve is drawn as follows:
@@ -447,7 +451,7 @@ The curve is drawn as follows:
       gray.lighten(80%)
     },
     align: center + horizon,
-    columns: (1fr, 1fr, 1fr), [File name], [Size], [Time(s)], [normal_int_10], [10], [0.000039636], [normal_int_50], [50], [0.000127671], [normal_int_100], [100], [0.00043265], [normal_int_500], [500], [0.001962675], [normal_int_1000], [1000], [0.00571202], [normal_int_5000], [5000], [0.02116575], [normal_int_10000], [10000], [0.05734626], ), caption: "Performance Tests for BL Algorithm in Normal Distribution"
+    columns: (1fr, 1fr, 1fr), [File name], [Size], [Time(s)], [normal_int_10], [10], [0.000039636], [normal_int_50], [50], [0.000127671], [normal_int_100], [100], [0.00043265], [normal_int_500], [500], [0.001962675], [normal_int_1000], [1,000], [0.00571202], [normal_int_5000], [5,000], [0.02116575], [normal_int_10000], [10,000], [0.05734626], ), caption: "Performance Tests for BL Algorithm in Normal Distribution"
 )
 
 The curve is drawn as follows:
@@ -613,6 +617,7 @@ Note that our randomly-generated input data complies the #underline[uniform dist
 
 #show table.cell.where(x: 0): strong
 
+
 #set text(size: 12pt)
 
 #figure(
@@ -622,7 +627,7 @@ Note that our randomly-generated input data complies the #underline[uniform dist
       gray.lighten(80%)
     },
     align: center + horizon,
-    columns: (10em, 1fr, 1fr, 1fr, 1fr, 1fr), [Number of Items], [10,000], [20,000], [40,000], [80,000], [160,000], [Iterations], [100], [50], [10], [5], [1], [Ticks], [4068], [7560], [6113], [12382], [10304], [Total Time(s)], [4.068], [7.560], [6.113], [12.382], [10.304], [Duration(s)], [0.04068], [0.1512], [0.6113], [2.4764], [10.304]), caption: "Performance Tests for FFDH Algorithm"
+    columns: (10em, 1fr, 1fr, 1fr, 1fr, 1fr), [Number of Items], [10,000], [20,000], [40,000], [80,000], [160,000], [Iterations], [100], [50], [10], [5], [1], [Ticks], [4,068], [7,560], [6,113], [12,382], [10,304], [Total Time(s)], [4.068], [7.560], [6.113], [12.382], [10.304], [Duration(s)], [0.04068], [0.1512], [0.6113], [2.4764], [10.304]), caption: "Performance Tests for FFDH Algorithm"
 )
 
 #set text(size: 14pt)
@@ -635,7 +640,7 @@ We use a *quadratic polynomial curve* fitting data point, and find that there is
 
 == Comparative Analysis
 
-=== FFDH Advantages analysis
+=== FFDH Advantages Analysis
 
 #v(.5em)
 
@@ -652,7 +657,7 @@ Take the result graph generated by uniform_int_100 test data as an example.
 It can be seen that the FFDH algorithm has a higher space utilization rate. The main reason is that BL and even the failed improved algorithms of BL cannot solve the huge space waste caused by sorting by width. For example, in the BL algorithm, after sorting by width, all rectangles with a width greater than w/2 have to be arranged in a separate row, and the degree of space waste on the other side is much greater than the degree of space waste in the vertical direction of the FFDH algorithm.
 This makes the FFDH algorithm obtain better results in almost all our test samples.
 
-=== Failure of algorithm improvement
+=== Failure of Algorithm Improvement
 
 #v(.5em)
 
@@ -660,7 +665,7 @@ Here is a more detailed explanation of the failure of the BL_change algorithm. T
 
 #grid(columns: (1fr, 1fr))[#figure(image("images/13.png"), caption: "Ni_100_BL.png")][#figure(image("images/14.png"), caption: "Ni_100_C.png")]
 
-There is a very obvious anomaly in the upper half of the image of the improved algorithm. The reason is that I did not fully implement the BL algorithm to put the rectangle as far to the left as possible (my implementation method was to put the rectangle at the lowest position that can be placed, and then take the leftmost position node).
+There is a very obvious anomaly in the upper half of the image of the improved algorithm. The reason is that I did not fully implement the BL algorithm to put the rectangle as far to the left as possible (our implementation method was to put the rectangle at the lowest position that can be placed, and then take the leftmost position node).
 However, due to time constraints, we were unable to fix this problem.
 
 = Chapter 4: Analysis and Comments
@@ -704,14 +709,14 @@ Both BL algorithm and FFDH algorithm are $O(N^2)$, where$N$ is the number of ite
 
 - #fakebold[BL algorithm]:
 
-  - #fakebold[Initialization and sorting]:
+  - Initialization and sorting:
     - `sort`: The time complexity of the sorting operation is $O(N log N)$.
-  - #fakebold[Main loop]:
-    - The main loop `while (cnt < (*recs).size())` runs $n$ times.
-    - In each loop, the inner loop `for (auto p=upBound.begin(); p!=upBound.end(); p++)` traverses the upBound list. The length of the upBound list can reach $n$ in the worst case, so the time complexity of the inner loop is $O(N)$.
+  - Main loop:
+    - The main loop `while (cnt < (*recs).size())` runs $N$ times.
+    - In each loop, the inner loop `for (auto p=upBound.begin(); p!=upBound.end(); p++)` traverses the upBound list. The length of the upBound list can reach $N$ in the worst case, so the time complexity of the inner loop is $O(N)$.
     - In the inner loop, there is also a nested loop `for (auto it=p; it!=upBound.begin(); it--)`, which also needs to traverse the upBound list in the worst case, with a time complexity of $O(N)$.
     - Overall, the time complexity of the main loop is $O(N^2)$.
-  - #fakebold[Insert and delete operations]:
+  - Insert and delete operations:
     - Operations such as `upBound.insert(p, {...})` and `upBound.remove(*p)` require $O(N)$ time in the worst case, because upBound is a linked list.
 
   Based on the above analysis, the time complexity of the entire algorithm is $O(N^2)$.
@@ -721,6 +726,102 @@ Both BL algorithm and FFDH algorithm are $O(N^2)$, where$N$ is the number of ite
   - Now let's consider the core part of FFDH algorithm: it consists of a loop with two layers, the outer one corresponds to $N$ directly, the inner one is controlled by `level`. As we have analyzed in Space Complexity, `level` $lt.eq N$. So the overall time consumption of the loop is less than $c N^2$, when $c$ is a constant.
   - The last part of the algorithm is printing the debug info. Since it just prints the information of items sequentially, its time complexity is just $O(N)$.
   - In a nutshell, the total time complexity is $O(N^2)$.
+
+== Approximation Ratio Analysis
+
+#v(.5em)
+
+Although we have already known in Chapter 2 that the theoretical approximation ratios of BL algorithm and FFDH algorithm are 3 and 2.7 respectively, we don't know the practical approximation ratios in actual test environments. Consequently, we design some tests to check what the aprroximation ratios will be under different conditions.
+
+We use a new and more precise generator called `rec_gen.cpp`, which attains random-size items from a specified rectangle(we can modify its width and height), so the optimal solutiion is the height of this original rectangle without any holes or empty spaces in the bin.
+
+=== With Diffrent Input Sizes
+
+#v(.5em)
+
+Testing Table:
+
+Width = 5000, Height = 10000
+
+#set text(size: 10pt)
+
+#figure(
+  table( 
+    fill: (x, y) =>
+    if x == 0 or x == 1{
+      gray.lighten(80%)
+    },
+    align: center + horizon,
+    columns: (10em, 8em, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr), table.cell(colspan: 2)[Number of Items], [1,000], [2,000], [4,000], [6,000], [8,000], [10,000], table.cell(colspan: 2)[Optimal Solution(Height)], table.cell(colspan: 6)[10000], table.cell(rowspan: 2)[BL Algorithm], [Result], [16,157], [17,502], [14,050], [14,414], [14,257], [14,299], [Approximation Ratio], [1.6157], [1.7502], [1.4050], [1.4414], [1.4257], [1.4299], table.cell(rowspan: 2)[FFDH Algorithm], [Result], [13,230], [12,423], [11,736], [11,404], [12,144], [13,578], [Approximation Ratio], [1.3230], [1.2423], [1.1736], [1.1404], [1.2144], [1.3578]), caption: "Approximation Ratio Tests with Diffrent Input Sizes"
+)
+
+#set text(size: 14pt)
+
+Curve Diagram:
+
+#figure(image("images/approx_size.png", width: 110%), caption: "Approximation Ratio Tests with Different Input Sizes")
+
+- The approximation ratio of FFDH algorithm is always smaller than the one of BL algorithm.
+- Judging from the results, the impact of the input size on the approximate ratio does not show obvious characteristics and laws, especially the approximate ratio of the BL algorithm seems to be a stable value. Therefore, we speculate that the input size have slight influence on the approximation ratio, and that with the increase in input size, the approximate ratio is likely to stabilize near a certain value.
+
+=== With Diffrent Widths
+
+#v(.5em)
+
+Testing Table:
+
+Width : Height  = 1 : 2, Number of Items = 5000
+
+#set text(size: 10pt)
+
+#figure(
+  table( 
+    fill: (x, y) =>
+    if x == 0 or x == 1{
+      gray.lighten(80%)
+    },
+    align: center + horizon,
+    columns: (10em, 8em, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr), table.cell(colspan: 2)[Width], [1,000], [2,000], [4,000], [6,000], [8,000], [10,000], table.cell(colspan: 2)[Optimal Solution(Height)], [2,000], [4,000], [8,000], [12,000], [16,000], [20,000], table.cell(rowspan: 2)[BL Algorithm], [Result], [3,501], [6,162], [12,775], [19,726], [22,637], [28,312], [Approximation Ratio], [1.7505], [1.5405], [1.5969], [1.6438], [1.4148], [1.4156], table.cell(rowspan: 2)[FFDH Algorithm], [Result], [2,508], [5,070], [11,159], [13,707], [19,135], [22,941], [Approximation Ratio], [1.2540], [1.2675], [1.3949], [1.1423], [1.1959], [1.1470]), caption: "Approximation Ratio Tests with Diffrent Widths"
+)
+
+#set text(size: 14pt)
+
+Curve Diagram:
+
+#figure(image("images/approx_width.png", width: 110%), caption: "Approximation Ratio Tests with Different Widths")
+
+- The approximation ratio of FFDH algorithm is always smaller than the one of BL algorithm.
+- If two straight lines are used to fit the two curves, it can be seen that these straight line declines, which shows that as the width increases, the approximate ratio will gradually decrease. However, when the width is as large as a certain degree, it can be seen that the change speed of approximation ratio will decrease, and it will gradually become stable.
+
+=== With Diffrent Distributions of Widths and Heights
+
+#v(.5em)
+
+Testing Table:
+
+Width = 4000, Number of Items = 10000
+
+#set text(size: 10pt)
+
+#figure(
+  table( 
+    fill: (x, y) =>
+    if x == 0 or x == 1{
+      gray.lighten(80%)
+    },
+    align: center + horizon,
+    columns: (10em, 8em, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr), table.cell(colspan: 2)[Width : Height], [4:1], [2:1], [1:1], [1:2], [1:4], [1:8], table.cell(colspan: 2)[Optimal Solution(Height)], [1,000], [2,000], [4,000], [8,000], [16,000], [32,000], table.cell(rowspan: 2)[BL Algorithm], [Result], [1,534], [2,837], [5,788], [11,730], [23,459], [43,487], [Approximation Ratio], [1.5340], [1.4185], [1.4470], [1.4663], [1.4462], [1.3589], table.cell(rowspan: 2)[FFDH Algorithm], [Result], [1,313], [2,253], [5,016], [9,806], [19,857], [37,665], [Approximation Ratio], [1.3130], [1.1265], [1.2540], [1.2258], [1.2411], [1.1770]), caption: "Approximation Ratio Tests with Diffrent Width:Height Ratios"
+)
+
+#set text(size: 14pt)
+
+Curve Diagram:
+
+#figure(image("images/approx_ratio.png", width: 110%), caption: "Approximation Ratio Tests with Different Width:Height Ratios")
+
+- The approximation ratio of FFDH algorithm is always smaller than the one of BL algorithm.
+- It can be seen from the curve diagram that as the fraction of height has increased, the approximate ratio has declined, but the change is relatively gentle.
+- When the width height ratio is 2: 1, the approximate ratio of the two algorithms has reached a minimal value, which shows that under the conditions of this wide height ratio, the performance of the two algorithms may be better than the general situation.
 
 
 == Further Improvement
@@ -762,9 +863,11 @@ Both BL algorithm and FFDH algorithm are $O(N^2)$, where$N$ is the number of ite
 │       ├── BLMain.cpp
 │       ├── generate.cpp
 │       ├── generate_main.cpp
+│       ├── rec_gen.cpp
 │       ├── ttpMain.cpp
 │       ├── FFDH.cpp
-│       ├── curve.py
+│       ├── curve_time.py
+│       ├── curve_approx.py
 │       └── draw.py
 └── documents
     └── report.pdf
@@ -803,6 +906,10 @@ Both BL algorithm and FFDH algorithm are $O(N^2)$, where$N$ is the number of ite
 
 #importCode("../code/scripts/generate_main.cpp")
 
+== rec_gen.cpp
+
+#importCode("../code/scripts/rec_gen.cpp")
+
 
 = References
 
@@ -814,16 +921,28 @@ Both BL algorithm and FFDH algorithm are $O(N^2)$, where$N$ is the number of ite
 
 3. E. G. Coffman, JR., M. R. Garey, D. S. Johnson, and R. E. Tarjan, _Performance Bounds for Level-Oriented Two-Dimensional Packing Algorithms_, #link("https://epubs.siam.org/doi/abs/10.1137/0209062")[#text(fill: blue)[https://epubs.siam.org/doi/abs/10.1137/0209062]] 
 
+= Author List
+
+#v(.5em)
+
+- #fakebold[Huang Xingyao]: 
+  - Designed the BL algorithm, tested and analyzed this algorithm, including approximation ratio, time and space complexity. 
+  - Sorted the entire file structure.
+- #fakebold[Qian Ziyang]:
+  - Designed the FFDH algorithm, tested and analyzed this algorithm, including approximation ratio, time and space complexity. 
+  - Wrote the bulk of the report.
+  - Gave the presentation in the class.
+
 = Declaration
 
 #v(.5em)
 
 #fakebold[#fakeitalic[We hereby declare that all the work done in this project titled "Texture Packing" is of our independent effort as a group.]]
 
-// = Signatures
+= Signatures
 
-// #align(center)[
-// #grid(columns: 2)[
-//   #image("images/signature_hxy.png", width: 60%)
-// ][#image("images/signature_qzy.jpg", width: 60%)]
-// ]
+#align(center)[
+#grid(columns: 2)[
+  #image("images/signature_hxy.png", width: 60%)
+][#image("images/signature_qzy.jpg", width: 60%)]
+]

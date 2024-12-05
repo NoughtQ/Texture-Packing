@@ -8,9 +8,9 @@ HEAD_DIR = ../scripts/headers
 BUILD_DIR = 
 
 FILES = scripts/ttpMain.cpp scripts/FFDH.cpp
-OBJS = main.o func.o generate.o ttpMain.o FFDH.o BL.o BLMain.o
-TARGET = ttpMain BLMain generate
-EXE = ttpMain.exe generate.exe BLMain.exe ttpMain.exe
+OBJS = main.o func.o generate.o ttpMain.o FFDH.o BL.o BLMain.o rec_gen.o
+TARGET = ttpMain BLMain generate rec_gen
+EXE = ttpMain.exe generate.exe BLMain.exe ttpMain.exe rec_gen.exe
 
 # 默认目标
 all: $(TARGET)
@@ -23,6 +23,9 @@ BLMain: BLMain.o BL.o generate.o
 
 generate: generate.o generate_main.o
 	$(CXX) -o $@  $^
+
+rec_gen: rec_gen.o
+	$(CXX) -o $@  $^	
 
 # 调试目标
 debug: 
@@ -46,6 +49,9 @@ generate.o : $(SCR_DIR)/generate.cpp $(HEAD_DIR)/header.h
 	$(CXX) $(CFLAGS) -c $< -o $@
 
 generate_main.o : $(SCR_DIR)/generate_main.cpp $(HEAD_DIR)/header.h
+	$(CXX) $(CFLAGS) -c $< -o $@
+
+rec_gen.o : $(SCR_DIR)/rec_gen.cpp 
 	$(CXX) $(CFLAGS) -c $< -o $@
 
 clean:

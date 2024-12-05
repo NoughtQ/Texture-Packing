@@ -49,13 +49,16 @@ Date: 2024/12/03
 <!--v-->
 ## Problem Description
 
-The project require us to design **approximation algorithms** running in polynomial time to solve **Texture Packing** problem. We can regard it as a **2-dimension bin packing**, with items("rectangle texture" in the problem) and bins("resulting texture" in the problem) having both width and height, but we only need a single bin with **bounded width** and **unbounded height**, and we should keep the bin with a (nearly) minimum height.
+The project requires us to design **approximation algorithms** running in polynomial time to solve **Texture Packing** problem. We can regard it as a **2-dimension bin packing**, with items("rectangle texture" in the problem) and bins("resulting texture" in the problem) having both width and height, but we only need a single bin with **bounded width** and **unbounded height**, and we should keep the bin with a (nearly) minimum height.
 
 
 <!--v-->
 ## BL Algorithm
 
+BL(Bottom-up left-justified) algorithm was first described by Baker et al.It works as follows:
+BL(Bottom-up left-justified) algorithm was first described by Baker et al.It works as follows:
 
+Let $L$ be a sequence of rectangular items. The algorithm iterates the sequence in the given order. For each considered item $r \in L$ , it searches for the bottom-most position to place it and then shifts it as far to the left as possible. Hence, <u>it places at the bottom-most left-most possible coordinate $(x, y)$ in the strip</u>.
 
 
 <!--v-->
@@ -75,6 +78,7 @@ Just like texture packing problem is the 2D version of bin packing problem, the 
 </div>
 
 
+
 <!--s-->
 <div class="middle center">
 <div style="width: 100%">
@@ -82,7 +86,74 @@ Just like texture packing problem is the 2D version of bin packing problem, the 
 # Part 2. Algorithm Specification
 
 <!--v-->
-## Data Structure
+## BL Algorithm 
+
+Data structure:
+
+```cpp
+// structure of a single item
+struct POINT{
+    double x;
+    double y;
+    double width;
+    double height;
+
+    //Overload the equal operator
+    bool operator==(const POINT& other)
+    {
+        return x == other.x 
+            && y == other.y 
+            && width == other.width;
+            && height == other.height;
+    };
+};
+```
+
+
+
+<!--v-->
+## BL Algorithm (Con.)
+
+Pseudocode:
+
+<div style="text-align: center; margin-top: -30px">
+  <img src="images/8.png" width="80%">
+</div>
+
+<!--v-->
+## Approximation Ratio of BL Algorithm
+
+**Conclusion**: BL algorithm is a 3-approximation algorithm.
+
+**Proof**:
+
+- $h^*$: the height of the lower edge of a tallest piece
+- $h_{\text{BL}} = h^* + y$
+- $A$: the region of the bin up to height $h^*$
+- Suppose $A$ is at least half occupied. Then we have $h_{\text{OPT}} \ge \text{max}(y,h^*/2)$
+  - $y \gt h^*/2$: $\frac{h_{\text{BL}}}{h_{\text{OPT}}} \le \frac{y+h^*}{y} \lt \frac{y+2y}{y}=3$
+  - $y \le h^*/2$: $\frac{h_{\text{BL}}}{h_{\text{OPT}}} \le \frac{h^*/2+h^*}{h^*/2}=3$
+
+<!--v-->
+## Proof of Approximation Ratio (Con.)
+
+Now let's prove that $A$ is at least half occupied.
+
+We assert that for every horizontal line in area $A$, the sum of the lengths of the lines crossing the rectangle must be no less than the sum of the lengths of the lines crossing the blank area.
+
+1. Each horizontal line must pass through a rectangle attached to the left edge. 
+
+<!--v-->
+## Proof of Approximation Ratio (Con.)
+
+2. Assuming that the horizontal line $l$ passes through a blank area $S$, 
+  - it is guaranteed by 1 that there must be a rectangle on its left. 
+  - Secondly, it is obvious that the width of the rectangle on the left is greater than the width of $S$, which is guaranteed by the fact that the width of the rectangle placed in the upper layer must be greater than $S$ (if not, $S$ can be placed in a new rectangle, and the width of the upper rectangle is not greater than the rectangle on the left of $S$)
+
+<!--v-->
+## FFDH Algorithm
+
+Data structure:
 
 <div class="mul-cols">
 <div class="col" style="width: 130%">
@@ -109,13 +180,9 @@ typedef struct item {
 
 
 <!--v-->
-## BL Algorithm
+## FFDH Algorithm (Con.)
 
-
-<!--v-->
-## FFDH Algorithm
-
-Parameters and Return values of the algorithm:
+Parameters and return values of the algorithm:
 
 **Inputs**:
 
@@ -173,8 +240,170 @@ Now we should figure out the approximation ratio of this algorithm. It was prove
 # Part 3. Test Results
 
 <!--v-->
-## BL Algorithm
+## BL Algorithm -- Correctness Tests
 
+<div class="mul-cols">
+<div class="col">
+
+**Sample 1**: 
+
+- Input: 10 squares with a side length of 6 and the width is 20
+
+</div>
+<div class="col" style="width: 120%">
+
+<div style="text-align: center">
+  <img src="images/10.png" width="80%">
+</div>
+
+</div>
+</div>
+
+<!--v-->
+## Correctness Tests (Con.)
+
+<div class="mul-cols">
+<div class="col">
+
+**Sample 2**: 
+
+<div class="mul-cols">
+<div class="col">
+
+- Input: 10 randomly generated rectangles and the width is 100
+
+```txt
+100 10
+99 54
+2 82
+8 28
+38 99
+59 51
+78 86
+30 9
+3 51
+39 26
+53 59
+```
+
+</div>
+<div class="col" style="width: 120%">
+
+<div style="text-align: center">
+  <img src="images/11.png" width="80%">
+</div>
+
+</div>
+</div>
+
+
+<!--v-->
+## Correctness Tests (Con.)
+
+<div class="mul-cols">
+<div class="col">
+
+**Sample 3**: 
+
+<div class="mul-cols">
+<div class="col">
+
+- Input: Random rectangles generated by the second type of random rectangles introduced above. The size of the large rectangle is 400 $times$ 200, and a total of `4*4` rectangles are generated.
+
+</div>
+<div class="col" style="width: 100%; margin-top: -80px">
+
+
+
+```txt
+200 16
+86 272
+5 272
+45 272
+64 272
+86 72
+5 72
+45 72
+64 72
+86 13
+5 13
+45 13
+64 13
+86 43
+5 43
+45 43
+64 43
+```
+
+</div>
+</div>
+
+
+<!--v-->
+## Correctness Tests (Con.)
+
+Result:
+
+<div style="text-align: center; margin-top: -30px">
+  <img src="images/12.png" width="60%">
+</div>
+
+<!--v-->
+## Performance Tests
+
+In order to simulate the real scene as realistically as possible, we selected samples generated by uniform distribution and normal distribution for time testing.
+
+Since there is no essential difference between the floating point case and the integer case, 
+only the integer case is analyzed here.
+
+<!--v-->
+## Performance Tests (Con.)
+
+**Uniform Distribution**:
+
+| file name         | size  | time/s      |
+| ----------------- | ----- | ----------- |
+| uniform_int_10    | 10    | 0.00029159  |
+| uniform_int_50    | 50    | 0.000112231 |
+| uniform_int_100   | 100   | 0.0004264   |
+| uniform_int_500   | 500   | 0.001882206 |
+| uniform_int_1000  | 1000  | 0.006107088 |
+| uniform_int_5000  | 5000  | 0.0226485   |
+| uniform_int_10000 | 10000 | 0.0588621   |
+
+<!--v-->
+## Performance Tests (Con.)
+
+Curve Diagram:
+
+<div style="text-align: center; margin-top: -40px">
+  <img src="images/BL_diagram_Ui.png" width="100%">
+</div>
+
+<!--v-->
+## Performance Tests (Con.)
+
+**Normal Distribution**:
+
+
+| file name        | size  | time.s      |
+| ---------------- | ----- | ----------- |
+| normal_int_10    | 10    | 0.000039636 |
+| normal_int_50    | 50    | 0.000127671 |
+| normal_int_100   | 100   | 0.00043265  |
+| normal_int_500   | 500   | 0.001962675 |
+| normal_int_1000  | 1000  | 0.00571202  |
+| normal_int_5000  | 5000  | 0.02116575  |
+| normal_int_10000 | 10000 | 0.05734626  |
+
+<!--v-->
+## Performance Tests (Con.)
+
+Curve Diagram:
+
+<div style="text-align: center; margin-top: -40px">
+  <img src="images/BL_diagram_Ni.png" width="100%">
+</div>
 
 <!--v-->
 ## FFDH Algorithm -- Correctness Tests
@@ -206,7 +435,7 @@ Now we should figure out the approximation ratio of this algorithm. It was prove
   <img src="images/2.png" width="80%">
 </div>
 
-<div style="text-align: center; margin-top: 18pt">Expected Result</div>
+<div style="text-align: center; margin-top: 18pt; margin-left: 50pt">Expected Result</div>
 
 </div>
 <div class="col" style="width: 100%">
@@ -339,6 +568,42 @@ $$
 that can pass almost all the data points, which shows that the FFDH algorithm can complete the calculation within the **quadratic polynomial time**. 
 
 
+<!--v-->
+## Comparative Analysis
+
+Take the result graph generated by uniform_int_100 test data as an example.
+
+<div class="mul-cols">
+<div class="col" style="width: 100%">
+
+<div style="text-align: center">
+  <img src="images/13.png" width="100%">
+</div>
+
+<div style="text-align: center">BL Algorithm</div>
+
+</div>
+<div class="col" style="width: 100%">
+
+<div style="text-align: center">
+  <img src="images/14.png" width="100%">
+</div>
+
+<div style="text-align: center">BL_change Algorithm</div>
+
+</div>
+<div class="col" style="width: 100%">
+
+<div style="text-align: center">
+  <img src="images/15.png" width="100%">
+</div>
+
+<div style="text-align: center">FFDH Algorithm</div>
+
+</div>
+</div>
+
+
 <!--s-->
 <div class="middle center">
 <div style="width: 100%">
@@ -348,14 +613,24 @@ that can pass almost all the data points, which shows that the FFDH algorithm ca
 <!--v-->
 ## Space Complexity
 
-**Conclusion**:
-
-- BL algorithm:
-- FFDH algorithm: $O(N)$, $N$ is the number of items.
+**Conclusion**: Both BL algorithm and FFDH algorithm are $O(N)$, where$N$ is the number of items.
 
 <!--v-->
 ## BL Algorithm
 
+- Storing rectangle information:
+  - Rectangle information is stored in `vector<rectangle> *recs`, with a space complexity of $O(N)$.
+- Store upper bound information:
+  - The upBound list stores the upper bound information, which contains $n$ elements in the worst case, and has a space complexity of $O(N)$.
+
+<!--v-->
+## BL Algorithm (Con.)
+
+- Temporary variables and auxiliary data structures:
+  - vector <POINT> kill is used to store the points to be deleted, which contains $n$ elements in the worst case, and has a space complexity of $O(N)$.
+  - Other temporary variables (such as height, rightPoint, pointCase, etc.) occupy constant space, and have a space complexity of $O(1)$.
+
+Based on the above analysis, the space complexity of the entire algorithm is $O(N)$.
 
 <!--v-->
 ## FFDH Algorithm
@@ -371,15 +646,28 @@ that can pass almost all the data points, which shows that the FFDH algorithm ca
 <!--v-->
 ## Time Complexity
 
-**Conclusion**:
-
-- BL algorithm:
-- FFDH algorithm: $O(N^2)$, $N$ is the number of items.
+**Conclusion**: Both BL algorithm and FFDH algorithm are $O(N^2)$, where$N$ is the number of items.
 
 
 <!--v-->
 ## BL Algorithm
 
+- Initialization and sorting:
+  - `sort`: The time complexity of the sorting operation is $O(N log N)$.
+- Main loop:
+  - The main loop `while (cnt < (*recs).size())` runs $N$ times.
+  - In each loop, the inner loop `for (auto p=upBound.begin(); p!=upBound.end(); p++)` traverses the upBound list. The length of the upBound list can reach $N$ in the worst case, so the time complexity of the inner loop is $O(N)$.
+
+<!--v-->
+## BL Algorithm (Con.)
+
+- Main loop (Con.):
+  - In the inner loop, there is also a nested loop `for (auto it=p; it!=upBound.begin(); it--)`, which also needs to traverse the upBound list in the worst case, with a time complexity of $O(N)$.
+  - Overall, the time complexity of the main loop is $O(N^2)$.
+- Insert and delete operations:
+  - Operations such as `upBound.insert(p, {...})` and `upBound.remove(*p)` require $O(N)$ time in the worst case, because upBound is a linked list.
+
+Based on the above analysis, the time complexity of the entire algorithm is $O(N^2)$.
 
 <!--v-->
 ## FFDH Algorithm
@@ -400,6 +688,14 @@ In a nutshell, the total time complexity is $O(N^2)$
 
 <!--v-->
 ## Further Improvement
+
+Use a modified version of the **RF algorithm**. 
+
+- First, put rectangles with a width greater than w/2 at the bottom in order. 
+- Then sort rectangles with a width less than w/2 by height. 
+- Take a layer from the remaining rectangles each time (similar to the FFDH algorithm), 
+- and then alternately descend (similar to BL, but once as close to the lower right as possible, once as close to the lower left as possible, and alternately).
+- Since the RF algorithm is a 2-approximation algorithm, this algorithm can probably also be close to 2-approximation.
 
 <!--s-->
 <div class="middle center title">
