@@ -9,7 +9,7 @@ BUILD_DIR =
 
 FILES = scripts/ttpMain.cpp scripts/FFDH.cpp
 OBJS = BLMain.o generate.o ttpMain.o  FFDH.o BL.o generate_main.o
-TARGET = ttpMain BLMain generate
+TARGET = ttpMain BLMain generate rec_gen
 EXE = ttpMain.exe generate.exe BLMain.exe
 
 # 默认目标
@@ -23,6 +23,9 @@ BLMain: BLMain.o BL.o generate.o
 
 generate: generate.o generate_main.o
 	$(CXX) -o $@  $^
+
+rec_gen: $(SCR_DIR)/rec_gen.cpp
+	$(CXX) -o $@ $<
 
 # 调试目标
 debug: 
