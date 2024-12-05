@@ -3,6 +3,7 @@ report-template
 output
 random_data
 hxy
+peer-review
 
 *.o
 *.exe

@@ -1,6 +1,0 @@
-Best_Fit_Minimum_Height: 0
-Best_Fit_Find_Time: 0.000000s
-First_Fit_Minimum_Height: 0
-First_Fit_Find_Time: 0.000000s
-Next_Fit_Minimum_Height: 0
-Next_Fit_Find_Time: 0.000000s
